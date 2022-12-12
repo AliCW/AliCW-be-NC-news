@@ -39,26 +39,4 @@ describe("/api/topics", () => {
 
       })
     })
-    test("returns an array of all topics held", () => {
-        return request(app)
-        .get("/api/topics")
-        .expect(200)
-        .then(({body: topics}) => {
-            expect(topics).toEqual([
-                {
-                  description: 'The man, the Mitch, the legend',
-                  slug: 'mitch'
-                },
-                {
-                  description: 'Not dogs',
-                  slug: 'cats'
-                },
-                {
-                  description: 'what books are made of',
-                  slug: 'paper'
-                }
-              ]
-              )
-        })
-    })
-})
+  })
