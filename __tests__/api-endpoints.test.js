@@ -79,3 +79,55 @@ describe("/api/articles", () => {
       });
   });
 });
+
+
+describe("/api/articles/:article_id", () => {
+  test("responds with a single article object only", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article.length).toBe(1);
+      });
+  });
+  test("checks the returned article_id matches the input query", () => {
+    return request(app)
+      .get("/api/articles/4")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0].article_id).toBe(4)
+      })
+  })
+
+  test("responds with a specific article object with the following properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0]).toBeObject();
+        expect(article.article[0]).toEqual({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+});
+
+describe("/api/articles/:article_id - Sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    return request(app)
+    .get("/api/articles/12vb4")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request");
+    });
+  });
+});
+
+
+//const checkOne = /.{5,}/g.test(name);

@@ -30,4 +30,32 @@ const findArticles = () => {
     });
 };
 
-module.exports = { findAllTopics, findArticles };
+const findArticleById = (params) => {
+    return db
+    .query(`
+    SELECT articles.author, articles.title, articles.article_id,
+    articles.body, articles.topic, articles.created_at, articles.votes
+    FROM articles
+    WHERE article_id = $1`,
+    [params])
+    .then(({ rows }) => {
+        return rows;
+    })
+
+}
+
+const findHighestArticle_Id = () => {
+    return db
+    .query(`
+    SELECT articles.article_id
+    FROM articles
+    ORDER BY article_id DESC
+    LIMIT 1`)
+}
+
+module.exports = { 
+    findAllTopics, 
+    findArticles,
+    findArticleById,
+    findHighestArticle_Id
+};
