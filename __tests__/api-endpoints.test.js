@@ -15,7 +15,7 @@ describe("/aip - bad path test", () => {
       .get("/aip")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("404 - path / route is not valid");
+        expect(msg).toBe("404 - Not found");
       });
   });
 });
@@ -121,13 +121,18 @@ describe("/api/articles/:article_id", () => {
 describe("/api/articles/:article_id - Sad path", () => {
   test("tests for an article_id that is not a valid number", () => {
     return request(app)
-    .get("/api/articles/12vb4")
-    .expect(400)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("400 - Bad request");
-    });
+      .get("/api/articles/12vb4")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
+    return request(app)
+      .get("/api/articles/2356432")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
+      });
   });
 });
-
-
-//const checkOne = /.{5,}/g.test(name);

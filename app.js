@@ -4,7 +4,6 @@ const app = express();
 const { 
     listArticles, 
     listTopics, 
-    handle404Errors,
     findSpecificArticle 
 } = require("./controllers/controller")
 
@@ -15,6 +14,16 @@ app.get("/api/articles", listArticles)
 
 app.get("/api/articles/:article_id", findSpecificArticle)
 
-app.all("/*", handle404Errors)
+app.all("/*", (request, response, next) => {
+  response.status(404).send({ msg: "404 - Not found" });
+  next();
+});
 
-module.exports = app
+app.use((error, request, response, next) => {
+  if (error.msg === "404 - No rows found") {
+    response.status(404).send({ msg: "404 - Not found" });
+  }
+  next();
+});
+
+module.exports = app;
