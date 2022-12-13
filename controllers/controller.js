@@ -12,7 +12,7 @@ const listTopics = (request, response) => {
 
 const listArticles = (request, response) => {
     findArticles().then((articles) => {
-        response.status(200).send(articles)
+        response.status(200).send({articles: articles})
     })
 }
 

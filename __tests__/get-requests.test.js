@@ -45,7 +45,8 @@ describe("/api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: articles }) => {
+      .then(({ body: {articles} }) => {
+        expect(articles).toHaveLength(12)
         articles.forEach((article) => {
           expect(article).toEqual({
             author: expect.any(String),
@@ -63,16 +64,15 @@ describe("/api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: articles }) => {
-        expect(articles[0].article_id).toBe(3);
-        expect(articles.length).toBe(12);
+      .then(({ body: {articles} }) => {
+        expect(articles).toBeSorted()
       });
   });
   test(`checks the count of comments for articles with & without comments posted`, () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: articles }) => {
+      .then(({ body: {articles} }) => {
         expect(articles[0].comments_count).toBe("2");
         expect(articles[5].comments_count).toBe("11");
         expect(articles[2].comments_count).toBe("0");
