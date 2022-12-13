@@ -122,9 +122,9 @@ describe("/api/articles/:article_id - Sad path", () => {
   test("tests for an article_id that is not a valid number", () => {
     return request(app)
       .get("/api/articles/12vb4")
-      .expect(400)
+      .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
+        expect(msg).toBe("404 - Not found");
       });
   });
   test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {

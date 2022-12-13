@@ -20,7 +20,7 @@ app.all("/*", (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-  if (error.msg === "404 - No rows found") {
+  if (error.code === "22P02" || error.msg === "404 - No rows found") {
     response.status(404).send({ msg: "404 - Not found" });
   }
   next();

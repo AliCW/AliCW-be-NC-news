@@ -17,16 +17,13 @@ const listArticles = (request, response) => {
 }
 
 const findSpecificArticle = (request, response, next) => {
-  if (isNaN(Number(request.params.article_id))) {
-    response.status(400).send({ msg: "400 - Bad request" });
-  } else {
-    findArticleById(request.params.article_id)
-      .then((article) => {
-        response.status(200).send({ article: { article } });
-      })
-      .catch(next);
-  }
+  findArticleById(request.params.article_id)
+    .then((article) => {
+      response.status(200).send({ article: { article } });
+    })
+    .catch(next);
 };
+
 
 module.exports = { 
     listTopics, 
