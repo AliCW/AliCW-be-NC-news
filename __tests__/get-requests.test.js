@@ -65,7 +65,7 @@ describe("/api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: {articles} }) => {
-        expect(articles).toBeSorted()
+        expect(articles).toBeSortedBy("created_at", {descending: true})
       });
   });
   test(`checks the count of comments for articles with & without comments posted`, () => {
