@@ -1,8 +1,8 @@
-const {findAllTopics, findArticles} = require("../model/model")
-
-const handle404Errors = (request, response) => {
-    response.status(404).send({ msg: "404 - path / route is not valid"})
-}
+const {
+  findAllTopics,
+  findArticles,
+  findArticleById,
+} = require("../model/model")
 
 const listTopics = (request, response) => {
     findAllTopics().then((topics) => {
@@ -16,4 +16,21 @@ const listArticles = (request, response) => {
     })
 }
 
-module.exports = { listTopics, listArticles, handle404Errors }
+const findSpecificArticle = (request, response, next) => {
+  if (isNaN(Number(request.params.article_id))) {
+    response.status(400).send({ msg: "400 - Bad request" });
+
+  }
+  findArticleById(request.params.article_id)
+    .then((article) => {
+      response.status(200).send({ article: { article } });
+    })
+    .catch(next);
+};
+
+
+module.exports = { 
+    listTopics, 
+    listArticles, 
+    findSpecificArticle, 
+    }

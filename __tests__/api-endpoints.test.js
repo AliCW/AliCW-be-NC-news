@@ -15,7 +15,7 @@ describe("/aip - bad path test", () => {
       .get("/aip")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("404 - path / route is not valid");
+        expect(msg).toBe("404 - Not found");
       });
   });
 });
@@ -76,6 +76,61 @@ describe("/api/articles", () => {
         expect(articles[0].comments_count).toBe("2");
         expect(articles[5].comments_count).toBe("11");
         expect(articles[2].comments_count).toBe("0");
+      });
+  });
+});
+
+
+describe("/api/articles/:article_id", () => {
+  test("responds with a single article object only", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article.length).toBe(1);
+      });
+  });
+  test("checks the returned article_id matches the input query", () => {
+    return request(app)
+      .get("/api/articles/4")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0].article_id).toBe(4)
+      })
+  })
+
+  test("responds with a specific article object with the following properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0]).toBeObject();
+        expect(article.article[0].author).toEqual(expect.any(String))
+        expect(article.article[0].title).toEqual(expect.any(String))
+        expect(article.article[0].article_id).toBe(1)
+        expect(article.article[0].body).toEqual(expect.any(String))
+        expect(article.article[0].topic).toEqual(expect.any(String))
+        expect(article.article[0].created_at).toEqual(expect.any(String))
+        expect(article.article[0].votes).toEqual(expect.any(Number))
+      });
+  });
+});
+
+describe("/api/articles/:article_id - Sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    return request(app)
+      .get("/api/articles/12vb4")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
+    return request(app)
+      .get("/api/articles/2356432")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
       });
   });
 });
