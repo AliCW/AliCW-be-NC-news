@@ -17,6 +17,10 @@ const listArticles = (request, response) => {
 }
 
 const findSpecificArticle = (request, response, next) => {
+  if (isNaN(Number(request.params.article_id))) {
+    response.status(400).send({ msg: "400 - Bad request" });
+
+  }
   findArticleById(request.params.article_id)
     .then((article) => {
       response.status(200).send({ article: { article } });

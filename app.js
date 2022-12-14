@@ -20,10 +20,16 @@ app.all("/*", (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-  if (error.code === "22P02" || error.msg === "404 - No rows found") {
-    response.status(404).send({ msg: "404 - Not found" });
+  if (error.code === "22P02") {
+    response.status(400).send({ msg: "400 - Bad request" });
   }
-  next();
+  else if (error.msg) {
+    response.status(404).send({ msg: error.msg || "404 - Not found" })
+  }
+  else {
+    console.log(error)
+    response.status(500).send({ msg: "500 - Internal server error"})
+  }
 });
 
 module.exports = app;

@@ -105,15 +105,13 @@ describe("/api/articles/:article_id", () => {
       .expect(200)
       .then(({ body: { article } }) => {
         expect(article.article[0]).toBeObject();
-        expect(article.article[0]).toEqual({
-          author: expect.any(String),
-          title: expect.any(String),
-          article_id: expect.any(Number),
-          body: expect.any(String),
-          topic: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-        });
+        expect(article.article[0].author).toEqual(expect.any(String))
+        expect(article.article[0].title).toEqual(expect.any(String))
+        expect(article.article[0].article_id).toBe(1)
+        expect(article.article[0].body).toEqual(expect.any(String))
+        expect(article.article[0].topic).toEqual(expect.any(String))
+        expect(article.article[0].created_at).toEqual(expect.any(String))
+        expect(article.article[0].votes).toEqual(expect.any(Number))
       });
   });
 });
@@ -122,9 +120,9 @@ describe("/api/articles/:article_id - Sad path", () => {
   test("tests for an article_id that is not a valid number", () => {
     return request(app)
       .get("/api/articles/12vb4")
-      .expect(404)
+      .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("404 - Not found");
+        expect(msg).toBe("400 - Bad request");
       });
   });
   test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
