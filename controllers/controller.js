@@ -3,6 +3,7 @@ const {
   findArticles,
   findArticleById,
   findCommentsByArticleId,
+  findHighestArticleId,
 } = require("../model/model")
 
 const listTopics = (request, response) => {
@@ -30,12 +31,22 @@ const findSpecificArticle = (request, response, next) => {
 };
 
 const findArticleComments = (request, response, next) => {
-  findCommentsByArticleId(request.params.article_id)
-    .then((comment) => {
-      response.status(200).send({ comments: comment})
-    })
-    .catch(next);
-}
+  if (isNaN(Number(request.params.article_id))) {
+    response.status(400).send({ msg: "400 - Bad request" });
+  }
+  findHighestArticleId().then((highestArticle_Id) => {
+    if (highestArticle_Id[0].article_id < request.params.article_id) {
+      response.status(404).send({ msg: "404 - Not found" });
+    } else {
+      findCommentsByArticleId(request.params.article_id)
+        .then((comment) => {
+          response.status(200).send({ comments: comment });
+        })
+        .catch(next);
+    }
+  });
+};
+
 
 module.exports = { 
     listTopics, 

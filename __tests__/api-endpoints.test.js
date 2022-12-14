@@ -172,3 +172,23 @@ describe("/api/articles/:article_id/comments - happy path", () => {
   });
 });
 
+describe("/api/articles/:article_id/comments - sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    return request(app)
+    .get("/api/articles/34kxa42/comments")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request");
+    });
+  })
+  test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
+    return request(app)
+    .get("/api/articles/9807542/comments")
+    .expect(404)
+    .then(({ body: { msg }}) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+});
+
+

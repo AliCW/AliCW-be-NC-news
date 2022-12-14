@@ -5,7 +5,7 @@ const {
     listArticles, 
     listTopics, 
     findSpecificArticle,
-    findArticleComments, 
+    findArticleComments 
 } = require("./controllers/controller")
 
 
@@ -36,6 +36,3 @@ app.use((error, request, response, next) => {
 });
 
 module.exports = app;
-
-
-//6. GET /api/articles/:article_id/comments

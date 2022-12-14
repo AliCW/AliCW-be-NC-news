@@ -65,9 +65,22 @@ const findCommentsByArticleId = (params) => {
     });
 };
 
+const findHighestArticleId = () => {
+  return db.query(
+    `SELECT comments.article_id
+    FROM comments
+    ORDER BY comments.article_id DESC
+    LIMIT 1`
+  )
+  .then(({ rows }) => {
+    return rows
+  })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
-    findCommentsByArticleId
+    findCommentsByArticleId,
+    findHighestArticleId,
 };
