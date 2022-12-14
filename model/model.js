@@ -50,8 +50,24 @@ const findArticleById = (params) => {
     });
 };
 
+const findCommentsByArticleId = (params) => {
+  return db
+    .query(
+      `SELECT comments.comment_id, comments.votes, comments.created_at, 
+     comments.author, comments.body
+     FROM comments
+     WHERE article_id = $1
+     `,
+      [params]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
+    findCommentsByArticleId
 };

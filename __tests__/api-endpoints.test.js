@@ -134,3 +134,41 @@ describe("/api/articles/:article_id - Sad path", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments - happy path", () => {
+  test(`responds with the correct number of associated comments for the given article_id`, () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: comment }) => {
+        expect(comment.comments.length).toBe(11);
+      });
+  });
+  test("returns an empty array if no comments match the article_id", () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(( {body: comment}) => {
+      expect(comment.comments).toBeArray()
+      expect(comment.comments.length).toBe(0)
+    })
+  })
+  test(`responds with an array of the comments for the given article_id with the following properties:
+      comment_id, votes, created_at, author, body`, () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then(({ body: comment }) => {
+        comment.comments.forEach((item) => {
+          expect(item).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+});
+

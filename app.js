@@ -4,7 +4,8 @@ const app = express();
 const { 
     listArticles, 
     listTopics, 
-    findSpecificArticle 
+    findSpecificArticle,
+    findArticleComments, 
 } = require("./controllers/controller")
 
 
@@ -13,6 +14,8 @@ app.get("/api/topics", listTopics)
 app.get("/api/articles", listArticles)
 
 app.get("/api/articles/:article_id", findSpecificArticle)
+
+app.get("/api/articles/:article_id/comments", findArticleComments)
 
 app.all("/*", (request, response, next) => {
   response.status(404).send({ msg: "404 - Not found" });
@@ -33,3 +36,6 @@ app.use((error, request, response, next) => {
 });
 
 module.exports = app;
+
+
+//6. GET /api/articles/:article_id/comments

@@ -2,6 +2,7 @@ const {
   findAllTopics,
   findArticles,
   findArticleById,
+  findCommentsByArticleId,
 } = require("../model/model")
 
 const listTopics = (request, response) => {
@@ -28,9 +29,17 @@ const findSpecificArticle = (request, response, next) => {
     .catch(next);
 };
 
+const findArticleComments = (request, response, next) => {
+  findCommentsByArticleId(request.params.article_id)
+    .then((comment) => {
+      response.status(200).send({ comments: comment})
+    })
+    .catch(next);
+}
 
 module.exports = { 
     listTopics, 
     listArticles, 
-    findSpecificArticle, 
+    findSpecificArticle,
+    findArticleComments, 
     }
