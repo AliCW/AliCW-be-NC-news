@@ -17,8 +17,6 @@ app.get("/api/articles/:article_id", findSpecificArticle)
 
 app.get("/api/articles/:article_id/comments", findArticleComments)
 
-
-
 app.all("/*", (request, response, next) => {
   response.status(404).send({ msg: "404 - Not found" });
   next();

@@ -30,12 +30,9 @@ const findSpecificArticle = (request, response, next) => {
 };
 
 const findArticleComments = (request, response, next) => {
-  if (isNaN(Number(request.params.article_id))) {
-    response.status(400).send({ msg: "400 - Bad request" });
-  }
   findCommentsByArticleId(request.params.article_id)
     .then((comment) => {
-      response.status(200).send({ comments: comment });
+      response.status(200).send({ comment });
     })
     .catch(next);
 };
