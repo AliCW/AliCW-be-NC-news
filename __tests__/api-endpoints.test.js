@@ -190,3 +190,26 @@ describe("/api/articles/:article_id/comments - sad path", () => {
   })
 });
 
+describe("POST - /api/articles/:article_id/comments", () => {
+  test("responds with the posted comment, an object with username & body key / values", () => {
+    const commentObj = {username: "lurker", body: "might be the best api i have ever seen in my life"}
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(commentObj)
+    .expect(201)
+    .then((comment ) => {
+      expect(comment.body).toBeObject()
+      expect(comment.body.postedComment[0].author).toBe("lurker")
+      expect(comment.body.postedComment[0].body).toBe("might be the best api i have ever seen in my life")
+    });
+  })
+  test("responds with a single comment response only", () => {
+    const commentObj = {username: "lurker", body: "this is a comment somehow"}
+    return request(app)
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect((comment) => {
+      expect(comment.body.postedComment.length).toBe(1)
+    })
+  })
+})

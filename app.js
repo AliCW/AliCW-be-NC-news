@@ -6,8 +6,10 @@ const {
     listTopics, 
     findSpecificArticle,
     findArticleComments,
+    postArticleComment,
 } = require("./controllers/controller")
 
+app.use(express.json());
 
 app.get("/api/topics", listTopics)
 
@@ -16,6 +18,8 @@ app.get("/api/articles", listArticles)
 app.get("/api/articles/:article_id", findSpecificArticle)
 
 app.get("/api/articles/:article_id/comments", findArticleComments)
+
+app.post("/api/articles/:article_id/comments", postArticleComment)
 
 app.all("/*", (request, response, next) => {
   response.status(404).send({ msg: "404 - Not found" });
