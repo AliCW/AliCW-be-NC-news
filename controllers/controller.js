@@ -40,8 +40,7 @@ const findArticleComments = (request, response, next) => {
 };
 
 const postArticleComment = (request, response, next) => {
-  const { username, body} = request.body
- // console.log(request.body)
+  const { username, body } = request.body
   postCommentById(username, body, request.params.article_id)
   .then((postedComment) => {
     response.status(201).send({postedComment})

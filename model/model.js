@@ -72,39 +72,23 @@ const findCommentsByArticleId = (params) => {
 };
 
 const postCommentById = (username, body, article_id) => {
-  //console.log(username, body, article_id)
   return db.query(
     `INSERT INTO comments
     (author, body, article_id)
     VALUES 
     ($1, $2, $3)
-    RETURNING comment_id;
+    RETURNING author, body;
   `, [username, body, article_id]
   )
-  .then(({rows: comment_id}) => {
-    if (comment_id[0].comment_id === 0 || comment_id[0].comment_id === undefined) {
+  .then(({rows: comment}) => {
+    if (comment.length === 0) {
       return Promise.reject({
         msg: "404 - Not found",
       });
     }
-    return db.query(
-      `SELECT author, body
-      FROM comments
-      WHERE comment_id = $1`, [comment_id[0].comment_id]
-    ) 
-  }).then(({rows}) => {
-    return rows
+    return comment
   })
 }
-
-//author === username
-//body === body / comment
-//article_id references the query number
-
-//votes & created at are have defaults
-//comment_id is serialised
-
-
 
 module.exports = { 
     findAllTopics, 

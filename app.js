@@ -27,7 +27,7 @@ app.all("/*", (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-  if (error.code === "22P02") {
+  if (error.code === "22P02"|| error.code === "23502" || error.code === "23503") {
     response.status(400).send({ msg: "400 - Bad request" });
   }
   else if (error.msg) {
@@ -35,7 +35,7 @@ app.use((error, request, response, next) => {
   }
   else {
     console.log(error)
-    response.status(500).send({ msg: "500 - Internal server error"})
+    response.status(500).send({ msg: "500 - Internal server ber error"})
   }
 });
 

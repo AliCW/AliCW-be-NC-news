@@ -192,24 +192,115 @@ describe("/api/articles/:article_id/comments - sad path", () => {
 
 describe("POST - /api/articles/:article_id/comments", () => {
   test("responds with the posted comment, an object with username & body key / values", () => {
-    const commentObj = {username: "lurker", body: "might be the best api i have ever seen in my life"}
+    const commentObj = {
+      username: "lurker",
+      body: "might be the best api i have ever seen in my life",
+    };
     return request(app)
-    .post("/api/articles/1/comments")
-    .send(commentObj)
-    .expect(201)
-    .then((comment ) => {
-      expect(comment.body).toBeObject()
-      expect(comment.body.postedComment[0].author).toBe("lurker")
-      expect(comment.body.postedComment[0].body).toBe("might be the best api i have ever seen in my life")
-    });
-  })
+      .post("/api/articles/1/comments")
+      .send(commentObj)
+      .expect(201)
+      .then((comment ) => {
+        //console.log(comment.body)
+        expect(comment.body.postedComment[0]).toBeObject();
+        expect(comment.body.postedComment[0].author).toBe("lurker");
+        expect(comment.body.postedComment[0].body).toBe(
+          "might be the best api i have ever seen in my life"
+        );
+      });
+  });
   test("responds with a single comment response only", () => {
-    const commentObj = {username: "lurker", body: "this is a comment somehow"}
+    const commentObj = {
+      username: "lurker",
+      body: "this is a comment somehow",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(201)
+      .expect((comment) => {
+        expect(comment.body.postedComment.length).toBe(1);
+      });
+  });
+  test("discounts extra data provided for comment insertion", () => {
+    const commentObj = {
+      crisps: "yummy",
+      username: "lurker",
+      body: "this is a comment somehow",
+      birds: "are lovley"
+    };
     return request(app)
     .post("/api/articles/3/comments")
     .send(commentObj)
+    .expect(201)
     .expect((comment) => {
-      expect(comment.body.postedComment.length).toBe(1)
-    })
-  })
-})
+      expect(Object.keys(comment.body.postedComment[0])).toEqual(["author", "body"])
+  })})
+});
+
+describe("POST - /api/articles/:article_id/comments - sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+      .post("/api/articles/38skfbfda42/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for an article_id that does not exist - generates an SQL foreign key violation", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+      .post("/api/articles/256425745/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for incorrect data types provided for comment entry", () => {
+    const commentObj = {
+      username: 876543456,
+      body: 98765,
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for not enough data provided for comment entry", () => {
+    const commentObj = {
+      username: "lurker",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for a user that does not exist in the database", () => {
+    const commentObj = {
+      username: "saddo",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+});
