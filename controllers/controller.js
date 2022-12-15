@@ -31,8 +31,8 @@ const findSpecificArticle = (request, response, next) => {
 
 const findArticleComments = (request, response, next) => {
   findCommentsByArticleId(request.params.article_id)
-    .then((comment) => {
-      response.status(200).send({ comment });
+    .then((comments) => {
+      response.status(200).send({ comments });
     })
     .catch(next);
 };

@@ -140,16 +140,16 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
-      .then(( comment ) => {
-        expect(comment.body.comment.length).toBe(11);
+      .then( ({ body: { comments }}) => {
+        expect(comments.length).toBe(11);
       });
   });
   test("returns an array of comments in descending order", () => {
     return request(app)
     .get("/api/articles/1/comments")
     .expect(200)
-    .then(( comment ) => {
-      expect(comment.body.comment).toBeSortedBy("created_at", {descending: true})
+    .then(( comments ) => {
+      expect(comments.body.comments).toBeSortedBy("created_at", {descending: true})
     })
   })
   test(`responds with an array of the comments for the given article_id with the following properties:
@@ -157,8 +157,8 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
-      .then(( comment ) => {
-        comment.body.comment.forEach((item) => {
+      .then(( comments ) => {
+        comments.body.comments.forEach((item) => {
           expect(item).toEqual({
             comment_id: expect.any(Number),
             votes: expect.any(Number),
