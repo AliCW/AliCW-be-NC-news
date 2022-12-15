@@ -144,13 +144,12 @@ describe("/api/articles/:article_id/comments - happy path", () => {
         expect(comment.comments.length).toBe(11);
       });
   });
-  test("returns an empty array if no comments match the article_id", () => {
+  test("returns an array of comments in descending order", () => {
     return request(app)
-    .get("/api/articles/2/comments")
+    .get("/api/articles/1/comments")
     .expect(200)
     .then(( {body: comment}) => {
-      expect(comment.comments).toBeArray()
-      expect(comment.comments.length).toBe(0)
+      expect(comment.comments).toBeSortedBy("created_at", {descending: true})
     })
   })
   test(`responds with an array of the comments for the given article_id with the following properties:
@@ -190,5 +189,4 @@ describe("/api/articles/:article_id/comments - sad path", () => {
     })
   })
 });
-
 

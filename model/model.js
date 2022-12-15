@@ -57,30 +57,24 @@ const findCommentsByArticleId = (params) => {
      comments.author, comments.body
      FROM comments
      WHERE article_id = $1
+     ORDER BY comments.created_at DESC
      `,
       [params]
     )
-    .then(({ rows }) => {
+    .then(( { rows } ) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        });
+      }
       return rows;
     });
 };
-
-const findHighestArticleId = () => {
-  return db.query(
-    `SELECT comments.article_id
-    FROM comments
-    ORDER BY comments.article_id DESC
-    LIMIT 1`
-  )
-  .then(({ rows }) => {
-    return rows
-  })
-}
 
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
     findCommentsByArticleId,
-    findHighestArticleId,
+
 };
