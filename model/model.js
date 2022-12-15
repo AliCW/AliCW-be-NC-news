@@ -50,8 +50,31 @@ const findArticleById = (params) => {
     });
 };
 
+const findCommentsByArticleId = (params) => {
+  return db
+    .query(
+      `SELECT comments.comment_id, comments.votes, comments.created_at, 
+     comments.author, comments.body
+     FROM comments
+     WHERE article_id = $1
+     ORDER BY comments.created_at DESC
+     `,
+      [params]
+    )
+    .then(( { rows } ) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        });
+      }
+      return rows;
+    });
+};
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
+    findCommentsByArticleId,
+
 };

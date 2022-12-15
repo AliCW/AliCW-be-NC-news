@@ -134,3 +134,59 @@ describe("/api/articles/:article_id - Sad path", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments - happy path", () => {
+  test(`responds with the correct number of associated comments for the given article_id`, () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then( ({ body: { comments }}) => {
+        expect(comments.length).toBe(11);
+      });
+  });
+  test("returns an array of comments in descending order", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(( comments ) => {
+      expect(comments.body.comments).toBeSortedBy("created_at", {descending: true})
+    })
+  })
+  test(`responds with an array of the comments for the given article_id with the following properties:
+      comment_id, votes, created_at, author, body`, () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then(( comments ) => {
+        comments.body.comments.forEach((item) => {
+          expect(item).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+          });
+        });
+      });
+  });
+});
+
+describe("/api/articles/:article_id/comments - sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    return request(app)
+    .get("/api/articles/34kxa42/comments")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request");
+    });
+  })
+  test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
+    return request(app)
+    .get("/api/articles/9807542/comments")
+    .expect(404)
+    .then(({ body: { msg }}) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+});
+
