@@ -90,12 +90,29 @@ const postCommentById = (username, body, article_id) => {
   })
 }
 
+const assignVotes = (body, params) => {
+  return db.query(
+    `UPDATE articles
+    SET votes = $1
+    WHERE article_id = $2
+    RETURNING *;`, [body, params]
+  )
+  .then(( {rows: article}) => {
+    if (article.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return article
+  })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
     findCommentsByArticleId,
     postCommentById,
-    
+    assignVotes
 
 };
