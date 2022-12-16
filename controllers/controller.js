@@ -64,12 +64,6 @@ const listUsers = (request, response, next) => {
   })
 }
 
-// const listTopics = (request, response, next) => {
-//   findAllTopics().then((topics) => {
-//       response.status(200).send({topics: topics})
-//   })
-//   .catch(next)
-
 module.exports = { 
     listTopics, 
     listArticles, 
