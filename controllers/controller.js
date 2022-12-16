@@ -16,10 +16,12 @@ const listTopics = (request, response, next) => {
 }
 
 const listArticles = (request, response, next) => {
-    findArticles().then((articles) => {
-        response.status(200).send({articles: articles})
+  //console.log(request.query) ///<<<<siphon the querys somehow - if requesst.query exists??
+    findArticles(request.query).then((articles) => {
+      response.status(200).send({articles: articles})
     })
-    .catch(next)
+    .catch(next);
+
 }
 
 const findSpecificArticle = (request, response, next) => {
@@ -64,6 +66,7 @@ const listUsers = (request, response, next) => {
   })
 }
 
+
 module.exports = { 
     listTopics, 
     listArticles, 
@@ -72,5 +75,4 @@ module.exports = {
     postArticleComment,
     addVotesToArticle,
     listUsers,
-    
     }

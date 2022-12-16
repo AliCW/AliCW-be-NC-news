@@ -445,3 +445,44 @@ describe("GET - /api/users - returns an array of objects containing user data - 
       })
     })
 })
+
+describe("GET - /api/articles(queries) - testing topic, sort_by & order queries - Happy path", () => {
+  test("checks all values are present & responds with all topics when no query is given", () => {
+    return request(app)
+      .get("/api/articles?topic")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
+        articles.forEach((article) => {
+          expect(article).toEqual({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comments_count: expect.any(String),
+          });
+        });
+      });
+  });
+  test("checks the returned articles are filtered by the specified query", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body: {articles} }) => {
+        articles.forEach((article) => {
+          expect(article.topic).toEqual('mitch')
+        });
+      })
+  })
+  test("checks only the queried topic is returned", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body: {articles} }) => {
+        expect(articles).toHaveLength(1);
+
+      })
+  })
+});

@@ -8,7 +8,7 @@ const {
     findArticleComments,
     postArticleComment,
     addVotesToArticle,
-    listUsers
+    listUsers,
 } = require("./controllers/controller")
 
 app.use(express.json());

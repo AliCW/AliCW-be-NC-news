@@ -11,24 +11,37 @@ const findAllTopics = () => {
     });
 };
 
-const findArticles = () => {
-  return db
-    .query(
-      `
-    SELECT 
-    articles.author, articles.title, articles.article_id, 
-    articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
-    FROM articles
-    FULL OUTER JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.title, articles.article_id, 
-    articles.topic, articles.created_at, articles.votes
-    ORDER BY articles.created_at DESC
-    `
-    )
-    .then(({ rows }) => {
+const findArticles = (query) => {
+  const queryString = `
+  SELECT 
+  articles.author, articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+  FROM articles
+  FULL OUTER JOIN comments ON articles.article_id = comments.article_id`;
+
+  const whereClause = `
+  WHERE topic = $1`;
+
+  const queryStringEnd = ` 
+  GROUP BY articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes
+  ORDER BY articles.created_at DESC
+  `;
+  // console.log(queryString + queryStringEnd);
+  // console.log(query)
+
+  if (!query.topic) {
+    return db.query(queryString + queryStringEnd).then(({ rows }) => {
       return rows;
     });
-};
+  } else {
+    console.log(queryString + whereClause + queryStringEnd)
+    return db.query(queryString + whereClause + queryStringEnd, [query.topic]).then(({ rows }) => {
+      return rows;
+    });
+  }
+}
+
 
 const findArticleById = (params) => {
   return db
@@ -117,6 +130,7 @@ const findUsers = () => {
     return rows
   })
 }
+
 
 module.exports = { 
     findAllTopics, 
