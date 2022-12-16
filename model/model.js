@@ -107,12 +107,23 @@ const assignVotes = (body, params) => {
   })
 }
 
+const findUsers = () => {
+  return db.query(  
+    `SELECT users.username, users.name, users.avatar_url
+     FROM users
+     ORDER BY users.username ASC;
+  `)
+  .then(({ rows }) => {
+    return rows
+  })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
     findCommentsByArticleId,
     postCommentById,
-    assignVotes
-
+    assignVotes,
+    findUsers,
 };
