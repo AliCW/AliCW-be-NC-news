@@ -25,7 +25,7 @@ describe("/api/topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body: {topics} }) => {
+      .then(({ body: { topics } }) => {
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toEqual(
@@ -45,8 +45,8 @@ describe("/api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: {articles} }) => {
-        expect(articles).toHaveLength(12)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(12);
         articles.forEach((article) => {
           expect(article).toEqual({
             author: expect.any(String),
@@ -64,22 +64,21 @@ describe("/api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: {articles} }) => {
-        expect(articles).toBeSortedBy("created_at", {descending: true})
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
   test(`checks the count of comments for articles with & without comments posted`, () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then(({ body: {articles} }) => {
+      .then(({ body: { articles } }) => {
         expect(articles[0].comments_count).toBe("2");
         expect(articles[5].comments_count).toBe("11");
         expect(articles[2].comments_count).toBe("0");
       });
   });
 });
-
 
 describe("/api/articles/:article_id", () => {
   test("responds with a single article object only", () => {
@@ -95,9 +94,9 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/4")
       .expect(200)
       .then(({ body: { article } }) => {
-        expect(article.article[0].article_id).toBe(4)
-      })
-  })
+        expect(article.article[0].article_id).toBe(4);
+      });
+  });
 
   test("responds with a specific article object with the following properties", () => {
     return request(app)
@@ -105,13 +104,13 @@ describe("/api/articles/:article_id", () => {
       .expect(200)
       .then(({ body: { article } }) => {
         expect(article.article[0]).toBeObject();
-        expect(article.article[0].author).toEqual(expect.any(String))
-        expect(article.article[0].title).toEqual(expect.any(String))
-        expect(article.article[0].article_id).toBe(1)
-        expect(article.article[0].body).toEqual(expect.any(String))
-        expect(article.article[0].topic).toEqual(expect.any(String))
-        expect(article.article[0].created_at).toEqual(expect.any(String))
-        expect(article.article[0].votes).toEqual(expect.any(Number))
+        expect(article.article[0].author).toEqual(expect.any(String));
+        expect(article.article[0].title).toEqual(expect.any(String));
+        expect(article.article[0].article_id).toBe(1);
+        expect(article.article[0].body).toEqual(expect.any(String));
+        expect(article.article[0].topic).toEqual(expect.any(String));
+        expect(article.article[0].created_at).toEqual(expect.any(String));
+        expect(article.article[0].votes).toEqual(expect.any(Number));
       });
   });
 });
@@ -140,25 +139,27 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
-      .then( ({ body: { comments }}) => {
+      .then(({ body: { comments } }) => {
         expect(comments.length).toBe(11);
       });
   });
   test("returns an array of comments in descending order", () => {
     return request(app)
-    .get("/api/articles/1/comments")
-    .expect(200)
-    .then(( {body: comments} ) => {
-      expect(comments.comments).toBeSortedBy("created_at", {descending: true})
-    })
-  })
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: comments }) => {
+        expect(comments.comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
   test(`responds with an array of the comments for the given article_id with the following properties:
       comment_id, votes, created_at, author, body`, () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
-      .then(( {body: comments} ) => {
-        expect(comments.length).not.toBe(0)
+      .then(({ body: comments }) => {
+        expect(comments.length).not.toBe(0);
         comments.comments.forEach((item) => {
           expect(item).toEqual({
             comment_id: expect.any(Number),
@@ -175,20 +176,20 @@ describe("/api/articles/:article_id/comments - happy path", () => {
 describe("/api/articles/:article_id/comments - sad path", () => {
   test("tests for an article_id that is not a valid number", () => {
     return request(app)
-    .get("/api/articles/34kxa42/comments")
-    .expect(400)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("400 - Bad request");
-    });
-  })
+      .get("/api/articles/34kxa42/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
   test("tests for a user provided article_id number that is higher than the highest article_id in the database", () => {
     return request(app)
-    .get("/api/articles/9807542/comments")
-    .expect(404)
-    .then(({ body: { msg }}) => {
-      expect(msg).toBe("404 - Not found")
-    })
-  })
+      .get("/api/articles/9807542/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
+      });
+  });
 });
 
 describe("POST - /api/articles/:article_id/comments (server responds with a 201 & posted comment) - happy path ", () => {
@@ -201,7 +202,7 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
       .post("/api/articles/1/comments")
       .send(commentObj)
       .expect(201)
-      .then(({body: comment} ) => {
+      .then(({ body: comment }) => {
         expect(comment.postedComment[0].author).toBe("lurker");
         expect(comment.postedComment[0].body).toBe(
           "might be the best api i have ever seen in my life"
@@ -217,7 +218,7 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
       .post("/api/articles/3/comments")
       .send(commentObj)
       .expect(201)
-      .expect(({body: comment}) => {
+      .expect(({ body: comment }) => {
         expect(comment.postedComment.length).toBe(1);
       });
   });
@@ -226,94 +227,98 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
       crisps: "yummy",
       username: "lurker",
       body: "this is a comment somehow",
-      birds: "are lovley"
-    };
-    return request(app)
-    .post("/api/articles/3/comments")
-    .send(commentObj)
-    .expect(201)
-    .expect(({body: comment}) => {
-      expect(Object.keys(comment.postedComment[0])).toEqual(["author", "body"])
-  })})
-  
-  describe("POST - /api/articles/:article_id/comments - sad path", () => {
-  test("tests for an article_id that is not a valid number", () => {
-    const commentObj = {
-      username: "lurker",
-      body: "you have sad eyes mr, seen some sad paths",
-    };
-    return request(app)
-      .post("/api/articles/38skfbfda42/comments")
-      .send(commentObj)
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
-      });
-  });
-  test("tests for an article_id that does not exist - generates an SQL foreign key violation", () => {
-    const commentObj = {
-      username: "lurker",
-      body: "you have sad eyes mr, seen some sad paths",
-    };
-    return request(app)
-      .post("/api/articles/256425745/comments")
-      .send(commentObj)
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
-      });
-  });
-  test("tests for incorrect data types provided for comment entry", () => {
-    const commentObj = {
-      username: 876543456,
-      body: 98765,
+      birds: "are lovley",
     };
     return request(app)
       .post("/api/articles/3/comments")
       .send(commentObj)
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
+      .expect(201)
+      .expect(({ body: comment }) => {
+        expect(Object.keys(comment.postedComment[0])).toEqual([
+          "author",
+          "body",
+        ]);
       });
+  });
+
+  describe("POST - /api/articles/:article_id/comments - sad path", () => {
+    test("tests for an article_id that is not a valid number", () => {
+      const commentObj = {
+        username: "lurker",
+        body: "you have sad eyes mr, seen some sad paths",
+      };
+      return request(app)
+        .post("/api/articles/38skfbfda42/comments")
+        .send(commentObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+    test("tests for an article_id that does not exist - generates an SQL foreign key violation", () => {
+      const commentObj = {
+        username: "lurker",
+        body: "you have sad eyes mr, seen some sad paths",
+      };
+      return request(app)
+        .post("/api/articles/256425745/comments")
+        .send(commentObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+    test("tests for incorrect data types provided for comment entry", () => {
+      const commentObj = {
+        username: 876543456,
+        body: 98765,
+      };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(commentObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
     });
     test("tests for not enough data provided for comment entry", () => {
       const commentObj = {
         username: "lurker",
       };
-    return request(app)
-    .post("/api/articles/3/comments")
-    .send(commentObj)
-    .expect(400)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("400 - Bad request");
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(commentObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+    test("tests for a user that does not exist in the database", () => {
+      const commentObj = {
+        username: "saddo",
+        body: "you have sad eyes mr, seen some sad paths",
+      };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(commentObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
     });
   });
-  test("tests for a user that does not exist in the database", () => {
-    const commentObj = {
-      username: "saddo",
-      body: "you have sad eyes mr, seen some sad paths",
+});
+
+describe("PATCH - /api/articles/:article_id - updates the linked article votes & returns said article- happy path", () => {
+  test("checks the patch request returns all article elements", () => {
+    const voteObj = {
+      inv_votes: 6,
     };
     return request(app)
-    .post("/api/articles/3/comments")
-    .send(commentObj)
-    .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
-      });
-    });
-});
-  });
-
-  describe("PATCH - /api/articles/:article_id - happy path", () => {
-    test("checks the patch request returns all article elements", () => {
-      const voteObj = {
-        inv_votes: 6,
-      }
-      return request(app)
       .patch("/api/articles/2")
       .send(voteObj)
       .expect(200)
-      .then(({body: {article}}) => {
+      .then(({ body: { article } }) => {
         expect(article[0]).toEqual({
           article_id: expect.any(Number),
           title: expect.any(String),
@@ -322,43 +327,92 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
           body: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
-        })
-      })
-    })
-    test("patch request returns a single article only", () => {
-      const voteObj = {
-        inv_votes: 6,
-      }
-      return request(app)
+        });
+      });
+  });
+  test("patch request returns a single article only", () => {
+    const voteObj = {
+      inv_votes: 6,
+    };
+    return request(app)
       .patch("/api/articles/2")
       .send(voteObj)
       .expect(200)
-      .then(({body: {article}}) => {
-        expect(article.length).toBe(1)
-      })
-    })
-    test("checks patch request has updated the vote postive number", () => {
-      const voteObj = {
-        inv_votes: 15,
-      }
-      return request(app)
+      .then(({ body: { article } }) => {
+        expect(article.length).toBe(1);
+      });
+  });
+  test("checks patch request has updated the vote with a postive number", () => {
+    const voteObj = {
+      inv_votes: 15,
+    };
+    return request(app)
       .patch("/api/articles/2")
       .send(voteObj)
       .expect(200)
-      .then(({body: {article}}) => {
-        expect(article[0].votes).toBe(15)
-      })
-    })
-    test("checks patch request has updated the vote negative number", () => {
-      const voteObj = {
-        inv_votes: -8,
-      }
-      return request(app)
+      .then(({ body: { article } }) => {
+        expect(article[0].votes).toBe(15);
+      });
+  });
+  test("checks patch request has updated the vote with a negative number", () => {
+    const voteObj = {
+      inv_votes: -8,
+    };
+    return request(app)
       .patch("/api/articles/2")
       .send(voteObj)
       .expect(200)
-      .then(({body: {article}}) => {
-        expect(article[0].votes).toBe(-8)
-      })
-    })
-  })
+      .then(({ body: { article } }) => {
+        expect(article[0].votes).toBe(-8);
+      });
+  });
+
+  describe("PATCH - /api/articles/:article_id - sad path", () => {
+    test("tests for an article_id that is not a valid number", () => {
+      const voteObj = {
+        inv_votes: 8,
+      };
+      return request(app)
+        .patch("/api/articles/14fef699gref")
+        .send(voteObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+    test("tests for an article_id that does not exist", () => {
+      const voteObj = {
+        inv_votes: 8,
+      };
+      return request(app)
+        .patch("/api/articles/2569564")
+        .send(voteObj)
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("404 - Not found");
+        });
+    });
+    test("tests for incorrect data types provided for vote entry", () => {
+      const voteObj = {
+        inv_votes: "howdy, partner",
+      };
+      return request(app)
+        .patch("/api/articles/2")
+        .send(voteObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+    test("tests for not enough data provided for vote entry", () => {
+      const voteObj = {};
+      return request(app)
+        .patch("/api/articles/2")
+        .send(voteObj)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+  });
+});

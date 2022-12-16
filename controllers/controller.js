@@ -50,7 +50,6 @@ const postArticleComment = (request, response, next) => {
 }
 
 const addVotesToArticle = (request, response, next) => {
-
   assignVotes(request.body.inv_votes, request.params.article_id)
   .then((article) => {
     response.status(200).send({article})

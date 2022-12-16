@@ -91,7 +91,6 @@ const postCommentById = (username, body, article_id) => {
 }
 
 const assignVotes = (body, params) => {
-  console.log(body, params)
   return db.query(
     `UPDATE articles
     SET votes = $1
