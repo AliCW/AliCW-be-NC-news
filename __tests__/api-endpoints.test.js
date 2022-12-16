@@ -148,8 +148,8 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
     .get("/api/articles/1/comments")
     .expect(200)
-    .then(( comments ) => {
-      expect(comments.body.comments).toBeSortedBy("created_at", {descending: true})
+    .then(( {body: comments} ) => {
+      expect(comments.comments).toBeSortedBy("created_at", {descending: true})
     })
   })
   test(`responds with an array of the comments for the given article_id with the following properties:
@@ -157,8 +157,8 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
-      .then(( comments ) => {
-        comments.body.comments.forEach((item) => {
+      .then(( {body: comments} ) => {
+        comments.comments.forEach((item) => {
           expect(item).toEqual({
             comment_id: expect.any(Number),
             votes: expect.any(Number),
@@ -200,11 +200,11 @@ describe("POST - /api/articles/:article_id/comments", () => {
       .post("/api/articles/1/comments")
       .send(commentObj)
       .expect(201)
-      .then((comment ) => {
-        //console.log(comment.body)
-        expect(comment.body.postedComment[0]).toBeObject();
-        expect(comment.body.postedComment[0].author).toBe("lurker");
-        expect(comment.body.postedComment[0].body).toBe(
+      .then(({body: comment} ) => {
+        //console.log(commebody.nt.body)
+        expect(comment.postedComment[0]).toBeObject();
+        expect(comment.postedComment[0].author).toBe("lurker");
+        expect(comment.postedComment[0].body).toBe(
           "might be the best api i have ever seen in my life"
         );
       });
@@ -218,8 +218,8 @@ describe("POST - /api/articles/:article_id/comments", () => {
       .post("/api/articles/3/comments")
       .send(commentObj)
       .expect(201)
-      .expect((comment) => {
-        expect(comment.body.postedComment.length).toBe(1);
+      .expect(({body: comment}) => {
+        expect(comment.postedComment.length).toBe(1);
       });
   });
   test("discounts extra data provided for comment insertion", () => {
@@ -233,8 +233,8 @@ describe("POST - /api/articles/:article_id/comments", () => {
     .post("/api/articles/3/comments")
     .send(commentObj)
     .expect(201)
-    .expect((comment) => {
-      expect(Object.keys(comment.body.postedComment[0])).toEqual(["author", "body"])
+    .expect(({body: comment}) => {
+      expect(Object.keys(comment.postedComment[0])).toEqual(["author", "body"])
   })})
 });
 

@@ -4,6 +4,7 @@ const {
   findArticleById,
   findCommentsByArticleId,
   postCommentById,
+  
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
@@ -48,10 +49,12 @@ const postArticleComment = (request, response, next) => {
   .catch(next)
 }
 
+
 module.exports = { 
     listTopics, 
     listArticles, 
     findSpecificArticle,
     findArticleComments, 
     postArticleComment,
+    
     }
