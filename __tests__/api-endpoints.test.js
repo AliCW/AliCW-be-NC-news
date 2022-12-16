@@ -303,3 +303,62 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
     });
 });
   });
+
+  describe("PATCH - /api/articles/:article_id - happy path", () => {
+    test("checks the patch request returns all article elements", () => {
+      const voteObj = {
+        inv_votes: 6,
+      }
+      return request(app)
+      .patch("/api/articles/2")
+      .send(voteObj)
+      .expect(200)
+      .then(({body: {article}}) => {
+        expect(article[0]).toEqual({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        })
+      })
+    })
+    test("patch request returns a single article only", () => {
+      const voteObj = {
+        inv_votes: 6,
+      }
+      return request(app)
+      .patch("/api/articles/2")
+      .send(voteObj)
+      .expect(200)
+      .then(({body: {article}}) => {
+        expect(article.length).toBe(1)
+      })
+    })
+    test("checks patch request has updated the vote postive number", () => {
+      const voteObj = {
+        inv_votes: 15,
+      }
+      return request(app)
+      .patch("/api/articles/2")
+      .send(voteObj)
+      .expect(200)
+      .then(({body: {article}}) => {
+        expect(article[0].votes).toBe(15)
+      })
+    })
+    test("checks patch request has updated the vote negative number", () => {
+      const voteObj = {
+        inv_votes: -8,
+      }
+      return request(app)
+      .patch("/api/articles/2")
+      .send(voteObj)
+      .expect(200)
+      .then(({body: {article}}) => {
+        expect(article[0].votes).toBe(-8)
+      })
+    })
+  })

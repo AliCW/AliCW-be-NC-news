@@ -7,7 +7,7 @@ const {
     findSpecificArticle,
     findArticleComments,
     postArticleComment,
-    
+    addVotesToArticle,
 } = require("./controllers/controller")
 
 app.use(express.json());
@@ -21,6 +21,8 @@ app.get("/api/articles/:article_id", findSpecificArticle)
 app.get("/api/articles/:article_id/comments", findArticleComments)
 
 app.post("/api/articles/:article_id/comments", postArticleComment)
+
+app.patch("/api/articles/:article_id", addVotesToArticle)
 
 
 app.all("/*", (request, response, next) => {

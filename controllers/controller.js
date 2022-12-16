@@ -4,7 +4,7 @@ const {
   findArticleById,
   findCommentsByArticleId,
   postCommentById,
-  
+  assignVotes,
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
@@ -49,6 +49,14 @@ const postArticleComment = (request, response, next) => {
   .catch(next)
 }
 
+const addVotesToArticle = (request, response, next) => {
+
+  assignVotes(request.body.inv_votes, request.params.article_id)
+  .then((article) => {
+    response.status(200).send({article})
+  })
+  .catch(next)
+}
 
 module.exports = { 
     listTopics, 
@@ -56,5 +64,6 @@ module.exports = {
     findSpecificArticle,
     findArticleComments, 
     postArticleComment,
+    addVotesToArticle,
     
     }
