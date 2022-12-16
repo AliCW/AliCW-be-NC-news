@@ -5,6 +5,7 @@ const {
   findCommentsByArticleId,
   postCommentById,
   assignVotes,
+  findUsers,
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
@@ -57,6 +58,18 @@ const addVotesToArticle = (request, response, next) => {
   .catch(next)
 }
 
+const listUsers = (request, response, next) => {
+  findUsers().then((members) => {
+    response.status(200).send({users: members})
+  })
+}
+
+// const listTopics = (request, response, next) => {
+//   findAllTopics().then((topics) => {
+//       response.status(200).send({topics: topics})
+//   })
+//   .catch(next)
+
 module.exports = { 
     listTopics, 
     listArticles, 
@@ -64,5 +77,6 @@ module.exports = {
     findArticleComments, 
     postArticleComment,
     addVotesToArticle,
+    listUsers,
     
     }

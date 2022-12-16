@@ -416,3 +416,32 @@ describe("PATCH - /api/articles/:article_id - updates the linked article votes &
     });
   });
 });
+
+
+describe("GET - /api/users - returns an array of objects containing user data - Happy path", () => {
+  test("responds with username, name & avatar_url for all users", () => {
+    return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({ body: {users} }) => {
+      users.forEach((user) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          })
+          )
+        })
+      })
+    })
+    test("returns all users from the database by username in ascending order", () => {
+      return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: {users} }) => {
+        expect(users.length).toBe(4);
+        expect(users).toBeSortedBy("username", {ascending: true,})
+      })
+    })
+})
