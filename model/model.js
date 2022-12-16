@@ -71,10 +71,31 @@ const findCommentsByArticleId = (params) => {
     });
 };
 
+const postCommentById = (username, body, article_id) => {
+  return db.query(
+    `INSERT INTO comments
+    (author, body, article_id)
+    VALUES 
+    ($1, $2, $3)
+    RETURNING author, body;
+  `, [username, body, article_id]
+  )
+  .then(({rows: comment}) => {
+    if (comment.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found",
+      });
+    }
+    return comment
+  })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
     findArticleById,
     findCommentsByArticleId,
+    postCommentById,
+    
 
 };

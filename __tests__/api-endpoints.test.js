@@ -25,7 +25,7 @@ describe("/api/topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body: topics }) => {
+      .then(({ body: {topics} }) => {
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toEqual(
@@ -148,8 +148,8 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
     .get("/api/articles/1/comments")
     .expect(200)
-    .then(( comments ) => {
-      expect(comments.body.comments).toBeSortedBy("created_at", {descending: true})
+    .then(( {body: comments} ) => {
+      expect(comments.comments).toBeSortedBy("created_at", {descending: true})
     })
   })
   test(`responds with an array of the comments for the given article_id with the following properties:
@@ -157,8 +157,9 @@ describe("/api/articles/:article_id/comments - happy path", () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
-      .then(( comments ) => {
-        comments.body.comments.forEach((item) => {
+      .then(( {body: comments} ) => {
+        expect(comments.length).not.toBe(0)
+        comments.comments.forEach((item) => {
           expect(item).toEqual({
             comment_id: expect.any(Number),
             votes: expect.any(Number),
@@ -190,3 +191,115 @@ describe("/api/articles/:article_id/comments - sad path", () => {
   })
 });
 
+describe("POST - /api/articles/:article_id/comments (server responds with a 201 & posted comment) - happy path ", () => {
+  test("responds with the posted comment, an object with username & body key / values", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "might be the best api i have ever seen in my life",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(commentObj)
+      .expect(201)
+      .then(({body: comment} ) => {
+        expect(comment.postedComment[0].author).toBe("lurker");
+        expect(comment.postedComment[0].body).toBe(
+          "might be the best api i have ever seen in my life"
+        );
+      });
+  });
+  test("responds with a single comment response only", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "this is a comment somehow",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(201)
+      .expect(({body: comment}) => {
+        expect(comment.postedComment.length).toBe(1);
+      });
+  });
+  test("discounts extra data provided for comment insertion", () => {
+    const commentObj = {
+      crisps: "yummy",
+      username: "lurker",
+      body: "this is a comment somehow",
+      birds: "are lovley"
+    };
+    return request(app)
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect(201)
+    .expect(({body: comment}) => {
+      expect(Object.keys(comment.postedComment[0])).toEqual(["author", "body"])
+  })})
+  
+  describe("POST - /api/articles/:article_id/comments - sad path", () => {
+  test("tests for an article_id that is not a valid number", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+      .post("/api/articles/38skfbfda42/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for an article_id that does not exist - generates an SQL foreign key violation", () => {
+    const commentObj = {
+      username: "lurker",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+      .post("/api/articles/256425745/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for incorrect data types provided for comment entry", () => {
+    const commentObj = {
+      username: 876543456,
+      body: 98765,
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+    });
+    test("tests for not enough data provided for comment entry", () => {
+      const commentObj = {
+        username: "lurker",
+      };
+    return request(app)
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request");
+    });
+  });
+  test("tests for a user that does not exist in the database", () => {
+    const commentObj = {
+      username: "saddo",
+      body: "you have sad eyes mr, seen some sad paths",
+    };
+    return request(app)
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+    });
+});
+  });
