@@ -37,7 +37,7 @@ app.use((error, request, response, next) => {
   }
   else {
     console.log(error)
-    response.status(500).send({ msg: "500 - Internal server ber error"})
+    response.status(500).send({ msg: "500 - Internal server error"})
   }
 });
 

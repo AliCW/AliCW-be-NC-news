@@ -25,7 +25,7 @@ describe("/api/topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body: topics }) => {
+      .then(({ body: {topics} }) => {
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toEqual(
@@ -158,6 +158,7 @@ describe("/api/articles/:article_id/comments - happy path", () => {
       .get("/api/articles/9/comments")
       .expect(200)
       .then(( {body: comments} ) => {
+        expect(comments.length).not.toBe(0)
         comments.comments.forEach((item) => {
           expect(item).toEqual({
             comment_id: expect.any(Number),
@@ -190,7 +191,7 @@ describe("/api/articles/:article_id/comments - sad path", () => {
   })
 });
 
-describe("POST - /api/articles/:article_id/comments", () => {
+describe("POST - /api/articles/:article_id/comments (server responds with a 201 & posted comment) - happy path ", () => {
   test("responds with the posted comment, an object with username & body key / values", () => {
     const commentObj = {
       username: "lurker",
@@ -201,8 +202,6 @@ describe("POST - /api/articles/:article_id/comments", () => {
       .send(commentObj)
       .expect(201)
       .then(({body: comment} ) => {
-        //console.log(commebody.nt.body)
-        expect(comment.postedComment[0]).toBeObject();
         expect(comment.postedComment[0].author).toBe("lurker");
         expect(comment.postedComment[0].body).toBe(
           "might be the best api i have ever seen in my life"
@@ -236,9 +235,8 @@ describe("POST - /api/articles/:article_id/comments", () => {
     .expect(({body: comment}) => {
       expect(Object.keys(comment.postedComment[0])).toEqual(["author", "body"])
   })})
-});
-
-describe("POST - /api/articles/:article_id/comments - sad path", () => {
+  
+  describe("POST - /api/articles/:article_id/comments - sad path", () => {
   test("tests for an article_id that is not a valid number", () => {
     const commentObj = {
       username: "lurker",
@@ -277,18 +275,18 @@ describe("POST - /api/articles/:article_id/comments - sad path", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("400 - Bad request");
       });
-  });
-  test("tests for not enough data provided for comment entry", () => {
-    const commentObj = {
-      username: "lurker",
-    };
+    });
+    test("tests for not enough data provided for comment entry", () => {
+      const commentObj = {
+        username: "lurker",
+      };
     return request(app)
-      .post("/api/articles/3/comments")
-      .send(commentObj)
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("400 - Bad request");
-      });
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request");
+    });
   });
   test("tests for a user that does not exist in the database", () => {
     const commentObj = {
@@ -296,11 +294,12 @@ describe("POST - /api/articles/:article_id/comments - sad path", () => {
       body: "you have sad eyes mr, seen some sad paths",
     };
     return request(app)
-      .post("/api/articles/3/comments")
-      .send(commentObj)
-      .expect(400)
+    .post("/api/articles/3/comments")
+    .send(commentObj)
+    .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("400 - Bad request");
       });
-  });
+    });
 });
+  });

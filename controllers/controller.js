@@ -9,7 +9,7 @@ const {
 
 const listTopics = (request, response, next) => {
     findAllTopics().then((topics) => {
-        response.status(200).send(topics)
+        response.status(200).send({topics: topics})
     })
     .catch(next)
 }
