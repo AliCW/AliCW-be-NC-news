@@ -6,23 +6,41 @@ const {
   postCommentById,
   assignVotes,
   findUsers,
+  findArticlesByWhereQuery,
+  findArticlesByOrderBy,
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
-    findAllTopics().then((topics) => {
+    findAllTopics(request.query).then((topics) => {
         response.status(200).send({topics: topics})
     })
     .catch(next)
 }
-
 const listArticles = (request, response, next) => {
-  //console.log(request.query) ///<<<<siphon the querys somehow - if requesst.query exists??
-    findArticles(request.query).then((articles) => {
-      response.status(200).send({articles: articles})
-    })
-    .catch(next);
-
-}
+  if (
+    Object.values(request.query).length === 0 ||
+    Object.values(request.query)[0] === ""
+  ) {
+    findArticles()
+      .then((articles) => {
+        response.status(200).send({ articles: articles });
+      })
+      .catch(next);
+  } else if (Object.keys(request.query)[0] === "sort_by") {
+    // console.log(request.query)
+    findArticlesByOrderBy(request.query)
+      .then((articles) => {
+        response.status(200).send({ articles: articles });
+      })
+      .catch(next);
+  } else {
+    findArticlesByWhereQuery(request.query)
+      .then((articles) => {
+        response.status(200).send({ articles: articles }); 
+      })
+      .catch(next);
+  }
+};
 
 const findSpecificArticle = (request, response, next) => {
   if (isNaN(Number(request.params.article_id))) {
@@ -64,6 +82,7 @@ const listUsers = (request, response, next) => {
   findUsers().then((members) => {
     response.status(200).send({users: members})
   })
+  .catch(next)
 }
 
 

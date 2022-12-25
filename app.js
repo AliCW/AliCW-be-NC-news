@@ -34,16 +34,21 @@ app.all("/*", (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-  if (error.code === "22P02"|| error.code === "23502" || error.code === "23503") {
+  if (
+    error.code === "22P02" ||
+    error.code === "23502" ||
+    error.code === "23503" ||
+    error.code === "42601"
+  ) {
     response.status(400).send({ msg: "400 - Bad request" });
-  }
-  else if (error.msg) {
-    response.status(404).send({ msg: error.msg || "404 - Not found" })
-  }
-  else {
-    console.log(error)
-    response.status(500).send({ msg: "500 - Internal server error"})
+  } else if (error.code === "42703" || error.msg) {
+    response.status(404).send({ msg: error.msg || "404 - Not found" });
+  } else {
+    console.log(error);
+    response.status(500).send({ msg: "500 - Internal server error" });
   }
 });
 
 module.exports = app;
+
+
