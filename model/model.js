@@ -91,7 +91,6 @@ const findArticlesByOrderBy = (query) => {
   return db
   .query(queryStringStart + queryStringEnd + orderClause
     ).then(({ rows }) => {
-      console.log(rows, "<<<<<")
       if (rows.length === 0) {
         return Promise.reject({
           msg: "404 - Not found",

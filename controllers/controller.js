@@ -27,7 +27,6 @@ const listArticles = (request, response, next) => {
       })
       .catch(next);
   } else if (Object.keys(request.query)[0] === "sort_by") {
-    // console.log(request.query)
     findArticlesByOrderBy(request.query)
       .then((articles) => {
         response.status(200).send({ articles: articles });
