@@ -30,6 +30,78 @@ const findArticles = () => {
     });
 };
 
+const findArticlesByWhereQuery = (query) => { 
+
+  const queryStringStart = `
+  SELECT 
+  articles.author, articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+  FROM articles
+  FULL OUTER JOIN comments ON articles.article_id = comments.article_id`;
+  
+  let orderClause = ` ORDER BY created_at DESC`
+  let whereClause = ``
+  
+  if (Object.keys(query)[0] === 'topic') {
+    whereClause = `
+    WHERE topic = $1`;
+  } 
+
+  const queryStringEnd = `
+  GROUP BY articles.author, articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes`
+
+  const queryValue = Object.values(query)
+  return db
+  .query(queryStringStart + whereClause + queryStringEnd + orderClause, queryValue
+    ).then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        })
+      }
+      return rows;
+    })
+
+}
+
+const findArticlesByOrderBy = (query) => {
+  const queryStringStart = `
+  SELECT 
+  articles.author, articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+  FROM articles
+  FULL OUTER JOIN comments ON articles.article_id = comments.article_id`;
+
+  let orderClause = ``
+
+  if(Object.keys(query)[0] === 'sort_by') {
+      orderClause = `
+      ORDER BY ${query.sort_by} DESC;` 
+    }
+  
+    if(Object.keys(query)[0] === 'sort_by' && Object.keys(query)[1] === 'order_by') {
+      orderClause = `
+      ORDER BY ${query.sort_by} ${query.order_by};` 
+    }
+
+  const queryStringEnd = `
+  GROUP BY articles.author, articles.title, articles.article_id, 
+  articles.topic, articles.created_at, articles.votes`
+  return db
+  .query(queryStringStart + queryStringEnd + orderClause
+    ).then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        })
+      }
+      return rows;
+    })
+
+}
+
+
 const findArticleById = (params) => {
   return db
     .query(
@@ -61,7 +133,7 @@ const findCommentsByArticleId = (params) => {
      `,
       [params]
     )
-    .then(( { rows } ) => {
+    .then(({ rows }) => {
       if (rows.length === 0) {
         return Promise.reject({
           msg: "404 - Not found",
@@ -72,23 +144,25 @@ const findCommentsByArticleId = (params) => {
 };
 
 const postCommentById = (username, body, article_id) => {
-  return db.query(
-    `INSERT INTO comments
+  return db
+    .query(
+      `INSERT INTO comments
     (author, body, article_id)
     VALUES 
     ($1, $2, $3)
     RETURNING author, body;
-  `, [username, body, article_id]
-  )
-  .then(({rows: comment}) => {
-    if (comment.length === 0) {
-      return Promise.reject({
-        msg: "404 - Not found",
-      });
-    }
-    return comment
-  })
-}
+  `,
+      [username, body, article_id]
+    )
+    .then(({ rows: comment }) => {
+      if (comment.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        });
+      }
+      return comment;
+    });
+};
 
 const assignVotes = (body, params) => {
   return db.query(
@@ -118,6 +192,7 @@ const findUsers = () => {
   })
 }
 
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -126,4 +201,6 @@ module.exports = {
     postCommentById,
     assignVotes,
     findUsers,
+    findArticlesByWhereQuery,
+    findArticlesByOrderBy,
 };
