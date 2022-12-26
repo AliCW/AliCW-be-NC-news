@@ -9,6 +9,7 @@ const {
     postArticleComment,
     addVotesToArticle,
     listUsers,
+    deleteCommentById,
 } = require("./controllers/controller")
 
 app.use(express.json());
@@ -26,6 +27,8 @@ app.get("/api/users", listUsers)
 app.post("/api/articles/:article_id/comments", postArticleComment)
 
 app.patch("/api/articles/:article_id", addVotesToArticle)
+
+app.delete("/api/comments/:comment_id", deleteCommentById)
 
 
 app.all("/*", (request, response, next) => {
