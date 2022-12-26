@@ -98,19 +98,37 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  test("responds with a specific article object with the following properties", () => {
+  test(`responds with a specific article object with the following properties
+        author, title, article_id, body, topic, created_at, votes, comment_count`, () => {
     return request(app)
-      .get("/api/articles/1")
+      .get("/api/articles/9")
       .expect(200)
       .then(({ body: { article } }) => {
         expect(article.article[0]).toBeObject();
         expect(article.article[0].author).toEqual(expect.any(String));
         expect(article.article[0].title).toEqual(expect.any(String));
-        expect(article.article[0].article_id).toBe(1);
+        expect(article.article[0].article_id).toBe(9);
         expect(article.article[0].body).toEqual(expect.any(String));
         expect(article.article[0].topic).toEqual(expect.any(String));
         expect(article.article[0].created_at).toEqual(expect.any(String));
         expect(article.article[0].votes).toEqual(expect.any(Number));
+        expect(article.article[0].comment_count).toEqual(expect.any(String));
+      });
+  });
+  test("checks the comment count is correct for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0].comment_count).toBe("11");
+      });
+  });
+  test("checks the comment count is zero for the article_id's with no associated comments", () => {
+    return request(app)
+      .get("/api/articles/2")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article[0].comment_count).toBe("0");
       });
   });
 });
@@ -417,34 +435,33 @@ describe("PATCH - /api/articles/:article_id - updates the linked article votes &
   });
 });
 
-
 describe("GET - /api/users - returns an array of objects containing user data - Happy path", () => {
   test("responds with username, name & avatar_url for all users", () => {
     return request(app)
-    .get("/api/users")
-    .expect(200)
-    .then(({ body: {users} }) => {
-      users.forEach((user) => {
-        expect(user).toEqual(
-          expect.objectContaining({
-            username: expect.any(String),
-            name: expect.any(String),
-            avatar_url: expect.any(String),
-          })
-          )
-        })
-      })
-    })
-    test("returns all users from the database by username in ascending order", () => {
-      return request(app)
       .get("/api/users")
       .expect(200)
-      .then(({ body: {users} }) => {
+      .then(({ body: { users } }) => {
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("returns all users from the database by username in ascending order", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
         expect(users.length).toBe(4);
-        expect(users).toBeSortedBy("username", {ascending: true,})
-      })
-    })
-})
+        expect(users).toBeSortedBy("username", { ascending: true });
+      });
+  });
+});
 
 describe("GET - /api/articles(queries) - testing topic queries - Happy path", () => {
   test("checks all values are present & responds with all topics when no query is given", () => {
@@ -471,7 +488,7 @@ describe("GET - /api/articles(queries) - testing topic queries - Happy path", ()
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
-      .then(({ body: { articles} }) => {
+      .then(({ body: { articles } }) => {
         articles.forEach((article) => {
           expect(article.topic).toEqual("mitch");
         });
@@ -498,12 +515,12 @@ describe("GET - /api/articles(queries) - testing topic queries - Happy path", ()
   });
   test("checks a topic slug that is not linked to any articles", () => {
     return request(app)
-    .get("/api/articles?topic=paper")
-    .expect(404)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("404 - Not found");
-    });
-  })
+      .get("/api/articles?topic=paper")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
+      });
+  });
 });
 
 describe("GET - /api/articles(queries) - testing sort_by queries - Happy path", () => {
@@ -511,43 +528,62 @@ describe("GET - /api/articles(queries) - testing sort_by queries - Happy path", 
     return request(app)
       .get("/api/articles?sort_by")
       .expect(200)
-      .then(({ body:  {articles}  }) => {
-        expect(articles).toBeSortedBy("created_at", {descending: true,})
-      })
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
   });
-})
-  test("when queried- sorts articles by votes, descending by default", () => {
-    return request(app)
-      .get("/api/articles?sort_by=votes")
-      .expect(200)
-      .then(({ body:  {articles}  }) => {
-        expect(articles).toBeSortedBy("votes", {descending: true,})
-      })
-      
-  });
-  test("when queried- sorts articles by article_id, ascending", () => {
-    return request(app)
-      .get("/api/articles?sort_by=article_id&order_by=asc")
-      .expect(200)
-      .then(({ body:  {articles}  }) => {
-        expect(articles).toBeSortedBy("article_id", {ascending: true,})
-      })
-    })
+});
+test("when queried- sorts articles by votes, descending by default", () => {
+  return request(app)
+    .get("/api/articles?sort_by=votes")
+    .expect(200)
+    .then(({ body: { articles } }) => {
+      expect(articles).toBeSortedBy("votes", { descending: true });
+    });
+});
+test("when queried- sorts articles by article_id, ascending", () => {
+  return request(app)
+    .get("/api/articles?sort_by=article_id&order_by=asc")
+    .expect(200)
+    .then(({ body: { articles } }) => {
+      expect(articles).toBeSortedBy("article_id", { ascending: true });
+    });
+});
 describe("GET - /api/articles(queries) - testing sort_by queries - Sad path", () => {
   test("checks for an invalid sort_by column query - no column found", () => {
     return request(app)
       .get("/api/articles?sort_by=ef5151424d")
       .expect(404)
-          .then(({ body: { msg } }) => {
-            expect(msg).toBe("404 - Not found");
-          });
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
       });
-      test("checks for an invalid sort_by column query - sql syntax error", () => {
-        return request(app)
-          .get("/api/articles?sort_by=article_id&order_by=dcsx")
-          .expect(400)
-              .then(({ body: { msg } }) => {
-                expect(msg).toBe("400 - Bad request");
-              });
-          });
+  });
+  test("checks for an invalid sort_by column query - sql syntax error", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order_by=dcsx")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("returns a 204 - No Content response upon comment deletion", () => {
+    return request(app)
+    .delete("/api/comments/2")
+    .expect(204)
+    .then((status) => {
+      expect(status.noContent).toBe(true)
+    })
+    
+  })
+  test("returns a 404 - Not Found response when comment_id does not exist", () => {
+    return request(app)
+    .delete("/api/comments/267")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("404 - Not found");
     });
+})
+})

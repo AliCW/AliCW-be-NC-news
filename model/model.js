@@ -75,15 +75,18 @@ const findArticlesByOrderBy = (query) => {
 
   let orderClause = ``
 
-  if(Object.keys(query)[0] === 'sort_by') {
-      orderClause = `
-      ORDER BY ${query.sort_by} DESC;` 
-    }
-  
-    if(Object.keys(query)[0] === 'sort_by' && Object.keys(query)[1] === 'order_by') {
-      orderClause = `
-      ORDER BY ${query.sort_by} ${query.order_by};` 
-    }
+  if (Object.keys(query)[0] === "sort_by") {
+    orderClause = `
+      ORDER BY ${query.sort_by} DESC;`;
+  }
+
+  if (
+    Object.keys(query)[0] === "sort_by" &&
+    Object.keys(query)[1] === "order_by"
+  ) {
+    orderClause = `
+      ORDER BY ${query.sort_by} ${query.order_by};`;
+  }
 
   const queryStringEnd = `
   GROUP BY articles.author, articles.title, articles.article_id, 
@@ -106,10 +109,14 @@ const findArticleById = (params) => {
   return db
     .query(
       `
-    SELECT articles.author, articles.title, articles.article_id,
-    articles.body, articles.topic, articles.created_at, articles.votes
-    FROM articles
-    WHERE article_id = $1`,
+      SELECT 
+      articles.author, articles.title, articles.article_id, articles.body,
+      articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comment_count
+      FROM articles
+      FULL OUTER JOIN comments ON articles.article_id = comments.article_id
+      WHERE articles.article_id = $1
+      GROUP BY articles.author, articles.title, articles.article_id, 
+      articles.topic, articles.created_at, articles.votes`,
       [params]
     )
     .then(({ rows }) => {
@@ -192,6 +199,21 @@ const findUsers = () => {
   })
 }
 
+const deleteComment = (params) => {
+  return db.query(`
+  DELETE FROM comments
+ WHERE comment_id = $1;    
+  `, [params])
+  .then((status) => {
+    if (status.rowCount === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return status
+  })
+}
+
 
 module.exports = { 
     findAllTopics, 
@@ -203,4 +225,5 @@ module.exports = {
     findUsers,
     findArticlesByWhereQuery,
     findArticlesByOrderBy,
+    deleteComment,
 };

@@ -8,6 +8,7 @@ const {
   findUsers,
   findArticlesByWhereQuery,
   findArticlesByOrderBy,
+  deleteComment,
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
@@ -84,13 +85,21 @@ const listUsers = (request, response, next) => {
   .catch(next)
 }
 
+const deleteCommentById = (request, response, next) => {
+  deleteComment(request.params.comment_id).then((status) => {
+    response.status(204).send({comment: status})
+  })
+  .catch(next)
+}
+
 
 module.exports = { 
     listTopics, 
     listArticles, 
     findSpecificArticle,
-    findArticleComments, 
+    findArticleComments,
     postArticleComment,
     addVotesToArticle,
     listUsers,
+    deleteCommentById,
     }
