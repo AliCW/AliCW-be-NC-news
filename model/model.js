@@ -1,7 +1,5 @@
 const db = require("../db/connection");
 
-
-
 const findAllTopics = () => {
   return db
     .query(
