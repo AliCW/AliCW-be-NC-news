@@ -568,22 +568,31 @@ describe("GET - /api/articles(queries) - testing sort_by queries - Sad path", ()
   });
 });
 
-describe("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id - Happy path", () => {
   test("returns a 204 - No Content response upon comment deletion", () => {
     return request(app)
-    .delete("/api/comments/2")
-    .expect(204)
-    .then((status) => {
-      expect(status.noContent).toBe(true)
-    })
-    
-  })
-  test("returns a 404 - Not Found response when comment_id does not exist", () => {
-    return request(app)
-    .delete("/api/comments/267")
-    .expect(404)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("404 - Not found");
+      .delete("/api/comments/2")
+      .expect(204)
+      .then((status) => {
+        expect(status.noContent).toBe(true);
+      });
+  });
+  describe("DELETE /api/comments/:comment_id - Sad path", () => {
+    test("returns a 404 - Not Found response when comment_id does not exist", () => {
+      return request(app)
+        .delete("/api/comments/267")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("404 - Not found");
+        });
     });
-})
-})
+    test("returns a 400 - Bad request when comment_id is not a number", () => {
+      return request(app)
+        .delete("/api/comments/5gbs5242")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("400 - Bad request");
+        });
+    });
+  });
+});
