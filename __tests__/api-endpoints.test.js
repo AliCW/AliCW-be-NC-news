@@ -328,7 +328,7 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
   });
 });
 
-describe("PATCH - /api/articles/:article_id - updates the linked article votes & returns said article- happy path", () => {
+describe("PATCH - /api/articles/:article_id - updates the linked article votes & returns said article - happy path", () => {
   test("checks the patch request returns all article elements", () => {
     const voteObj = {
       inv_votes: 6,
@@ -604,6 +604,7 @@ describe("GET - /api endpoint - Happy path", () => {
     .get("/api")
     .expect(200)
     .then(({ body: {endpoints}}) => {
+      //console.log(endpoints)
       expect(Object.keys(endpoints).length).toBe(4)
     })
   })

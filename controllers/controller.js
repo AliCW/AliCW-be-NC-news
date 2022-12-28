@@ -9,8 +9,12 @@ const {
   findArticlesByWhereQuery,
   findArticlesByOrderBy,
   deleteComment,
-  apiEndpoints,
 } = require("../model/model")
+
+const { 
+  apiEndpoints, 
+} = require("../model/endpoint-model")
+
 
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
