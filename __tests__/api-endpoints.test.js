@@ -603,8 +603,7 @@ describe("GET - /api endpoint - Happy path", () => {
     return request(app)
     .get("/api")
     .expect(200)
-    .then(({ body: {endpoints}}) => {
-      //console.log(endpoints)
+    .then(({ body: { endpoints } }) => {
       expect(Object.keys(endpoints).length).toBe(4)
     })
   })
@@ -612,7 +611,7 @@ describe("GET - /api endpoint - Happy path", () => {
     return request(app)
     .get("/api")
     .expect(200)
-    .then(({ body: {endpoints}}) => {
+    .then(({ body: { endpoints } }) => {
       expect(endpoints.GET).toBeArray()    
       expect(endpoints.POST).toBeArray()
       expect(endpoints.PATCH).toBeArray()
