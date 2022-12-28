@@ -9,6 +9,7 @@ const {
   findArticlesByWhereQuery,
   findArticlesByOrderBy,
   deleteComment,
+  apiEndpoints,
 } = require("../model/model")
 
 const listTopics = (request, response, next) => {
@@ -92,6 +93,10 @@ const deleteCommentById = (request, response, next) => {
   .catch(next)
 }
 
+const listEndpoints = (request, response, next) => {
+    response.status(200).send({endpoints: apiEndpoints()})
+}
+
 
 module.exports = { 
     listTopics, 
@@ -102,4 +107,5 @@ module.exports = {
     addVotesToArticle,
     listUsers,
     deleteCommentById,
+    listEndpoints,
     }

@@ -10,9 +10,12 @@ const {
     addVotesToArticle,
     listUsers,
     deleteCommentById,
+    listEndpoints,
 } = require("./controllers/controller")
 
 app.use(express.json());
+
+app.get("/api", listEndpoints)
 
 app.get("/api/topics", listTopics)
 

@@ -4,6 +4,7 @@ const app = require("../app");
 
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
+const { end } = require("../db/connection");
 
 afterAll(() => db.end());
 
@@ -596,3 +597,25 @@ describe("DELETE /api/comments/:comment_id - Happy path", () => {
     });
   });
 });
+
+describe("GET - /api endpoint - Happy path", () => {
+  test("checks endpoint listings only output four entries for get, post, patch & delete", () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({ body: {endpoints}}) => {
+      expect(Object.keys(endpoints).length).toBe(4)
+    })
+  })
+  test("lists the available endpoints", () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({ body: {endpoints}}) => {
+      expect(endpoints.GET).toBeArray()    
+      expect(endpoints.POST).toBeArray()
+      expect(endpoints.PATCH).toBeArray()
+      expect(endpoints.DELETE).toBeArray()
+    })
+  })
+})

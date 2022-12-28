@@ -1,5 +1,24 @@
 const db = require("../db/connection");
 
+const apiEndpoints = () => {
+  const endpoints = {
+    GET: [
+      "/api/topics",
+      "/api/articles",
+      "/api/articles/:article_id",
+      "/api/articles/:article_id/comments",
+      "/api/users",
+      "/api/articles?topic=<query>",
+      "/api/articles?sort_by=<query>",
+      "/api/articles?sort_by=<query>&order_by=<query>",
+    ],
+    POST: ["/api/articles/:article_id/comments"],
+    PATCH: ["/api/articles/:article_id"],
+    DELETE: ["/api/comments/:comment_id"]
+  };
+  return endpoints;
+};
+
 const findAllTopics = () => {
   return db
     .query(
@@ -226,4 +245,5 @@ module.exports = {
     findArticlesByWhereQuery,
     findArticlesByOrderBy,
     deleteComment,
+    apiEndpoints,
 };
