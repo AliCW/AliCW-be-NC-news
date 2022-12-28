@@ -11,6 +11,11 @@ const {
   deleteComment,
 } = require("../model/model")
 
+const { 
+  apiEndpoints, 
+} = require("../model/endpoint-model")
+
+
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
         response.status(200).send({topics: topics})
@@ -92,6 +97,10 @@ const deleteCommentById = (request, response, next) => {
   .catch(next)
 }
 
+const listEndpoints = (request, response, next) => {
+    response.status(200).send({endpoints: apiEndpoints()})
+}
+
 
 module.exports = { 
     listTopics, 
@@ -102,4 +111,5 @@ module.exports = {
     addVotesToArticle,
     listUsers,
     deleteCommentById,
+    listEndpoints,
     }

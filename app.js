@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+
 const { 
     listArticles, 
     listTopics, 
@@ -10,9 +11,12 @@ const {
     addVotesToArticle,
     listUsers,
     deleteCommentById,
+    listEndpoints,
 } = require("./controllers/controller")
 
 app.use(express.json());
+
+app.get("/api", listEndpoints)
 
 app.get("/api/topics", listTopics)
 
