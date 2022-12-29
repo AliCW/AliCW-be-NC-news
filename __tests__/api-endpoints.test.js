@@ -618,3 +618,49 @@ describe("GET - /api endpoint - Happy path", () => {
     })
   })
 })
+
+describe("GET /api/users/:username - Happy path", () => {
+  test("returns the specific username, name & avatar URL of the queried username", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user.rows[0].username).toBe("lurker");
+        expect(user.rows[0].name).toBe("do_nothing");
+        expect(user.rows[0].avatar_url).toBe(
+          "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+        );
+      });
+  });
+  test("returns only username, name & avatar_url of the chosen query", () => {
+    return request(app)
+      .get("/api/users/rogersop")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(Object.keys(user.rows[0])).toEqual([
+          "username",
+          "name",
+          "avatar_url",
+        ]);
+      });
+  });
+  test("returns only one username instance", () => {
+    return request(app)
+      .get("/api/users/icellusedkars")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user.rows.length).toEqual(1);
+      });
+  });
+});
+describe("GET /api/users/:username - Sad path", () => {
+  test("returns a 404 - Not found error when the given username does not exist", () => {
+    return request(app)
+      .get("/api/users/lurkey_turkey")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
+      });
+  });
+});
+
