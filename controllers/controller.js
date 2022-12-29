@@ -15,7 +15,6 @@ const {
   apiEndpoints, 
 } = require("../model/endpoint-model")
 
-
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
         response.status(200).send({topics: topics})
