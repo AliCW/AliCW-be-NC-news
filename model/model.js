@@ -214,6 +214,22 @@ const deleteComment = (params) => {
   })
 }
 
+const findUserByQuery = (params) => {
+  return db.query(`
+  SELECT 
+  users.username, users.name, users.avatar_url
+  FROM users
+  WHERE users.username = $1
+  `, [params])
+  .then((status) => {
+    if (status.rowCount === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return status
+  })
+}
 
 module.exports = { 
     findAllTopics, 
@@ -226,4 +242,5 @@ module.exports = {
     findArticlesByWhereQuery,
     findArticlesByOrderBy,
     deleteComment,
+    findUserByQuery, 
 };

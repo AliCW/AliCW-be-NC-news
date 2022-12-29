@@ -618,3 +618,38 @@ describe("GET - /api endpoint - Happy path", () => {
     })
   })
 })
+
+describe("GET /api/users/:username - Happy path", () => {
+  test("returns the specific username, name & avatar URL of the queried username", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user.rows[0].username).toBe("lurker");
+        expect(user.rows[0].name).toBe("do_nothing");
+        expect(user.rows[0].avatar_url).toBe(
+          "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+        );
+      });
+  });
+  test("returns only username, name & avatar_url of the chosen query", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(Object.keys(user.rows[0])).toEqual([
+          "username",
+          "name",
+          "avatar_url",
+        ]);
+      });
+  });
+  test("returns only one username instance", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user.rows.length).toEqual(1);
+      });
+  });
+});

@@ -9,11 +9,13 @@ const {
   findArticlesByWhereQuery,
   findArticlesByOrderBy,
   deleteComment,
+  findUserByQuery,
 } = require("../model/model")
 
 const { 
   apiEndpoints, 
 } = require("../model/endpoint-model")
+const { request } = require("../app")
 
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
@@ -96,6 +98,13 @@ const deleteCommentById = (request, response, next) => {
   .catch(next)
 }
 
+const findUser = (request, response, next) => {
+  findUserByQuery(request.params.username).then((user) => {
+    response.status(200).send({user: user})
+  })
+  .catch(next)
+}
+
 const listEndpoints = (request, response, next) => {
     response.status(200).send({endpoints: apiEndpoints()})
 }
@@ -111,4 +120,5 @@ module.exports = {
     listUsers,
     deleteCommentById,
     listEndpoints,
+    findUser,
     }
