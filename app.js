@@ -1,24 +1,23 @@
 const express = require("express");
 const app = express();
 
+const {
+  apiRouter,
+} = require("./routers/api-router")
 
 const { 
     listArticles, 
-    listTopics, 
     findSpecificArticle,
     findArticleComments,
     postArticleComment,
     addVotesToArticle,
     listUsers,
     deleteCommentById,
-    listEndpoints,
 } = require("./controllers/controller")
 
 app.use(express.json());
 
-app.get("/api", listEndpoints)
-
-app.get("/api/topics", listTopics)
+app.use("/api", apiRouter)
 
 app.get("/api/articles", listArticles)
 
