@@ -112,6 +112,19 @@ const apiEndpoints = () => {
           },
         },
       },
+      {
+        "/api/users/:username": {
+          path: "GET /api/users/mrcomment456",
+          description:
+            "lists the username, name & avatar URL of the specified user",
+          queries: [],
+          example: {
+            username: "mrcomment456",
+            name: "Mr Comment",
+            avatar_url: "https://exampleurl.net/img/12515474515148485415212",
+          },
+        },
+      },
     ],
     POST: [
       {
