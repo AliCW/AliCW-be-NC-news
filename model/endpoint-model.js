@@ -114,7 +114,7 @@ const apiEndpoints = () => {
       },
       {
         "/api/users/:username": {
-          path: "GET /api/users/mrcomment456",
+          path: "GET /api/users/:username",
           description:
             "lists the username, name & avatar URL of the specified user",
           queries: [],
@@ -154,7 +154,7 @@ const apiEndpoints = () => {
           queries: [2, 3],
           exampleQuery: "/api/articles/3",
           examplePatch: {
-            votes: 12,
+            inv_votes: 12,
           },
           example: {
             article_id: 3,
@@ -166,6 +166,24 @@ const apiEndpoints = () => {
             votes: 12,
           },
         },
+      },
+      {
+        "/api/comments/:comment_id": {
+          path: "PATCH /api/comments/:comment_id",
+          description: "Updates the linked comments votes & returns said comment",
+          queries: [2, 3],
+          exampleQuery: "/api/comments/2",
+          examplePatch: {
+            inv_votes: 12
+          },
+          example: {
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            votes: 12,
+            author: "butter_bridge",
+            article_id: 9,
+            created_at: 1586179020000,
+          }
+        }
       },
     ],
     DELETE: [

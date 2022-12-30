@@ -664,3 +664,60 @@ describe("GET /api/users/:username - Sad path", () => {
   });
 });
 
+describe("PATCH /api/comments/:comment_id", () => {
+  test("responds with all of the updated comment elements", () => {
+    const voteObj = {
+      inv_votes: 12,
+    };
+    return request(app)
+      .patch("/api/comments/2")
+      .send(voteObj)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment.rows[0]).toEqual({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          article_id: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("patch request returns a single comment only", () => {
+    const voteObj = {
+      inv_votes: 12,
+    };
+    return request(app)
+      .patch("/api/comments/4")
+      .send(voteObj)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment.rows.length).toBe(1);
+      });
+  });
+  test("checks patch request has updated the comment's vote with a postive number", () => {
+    const voteObj = {
+      inv_votes: 1,
+    };
+    return request(app)
+    .patch("/api/comments/2")
+    .send(voteObj)
+    .expect(200)
+    .then(({ body: { comment } }) => {
+      expect(comment.rows[0].votes).toBe(15)
+    })
+  })
+  test("checks patch request has updated the comment's vote with a negative number", () => {
+    const voteObj = {
+      inv_votes: -1,
+    };
+    return request(app)
+    .patch("/api/comments/1")
+    .send(voteObj)
+    .expect(200)
+    .then(({ body: { comment } }) => {
+      expect(comment.rows[0].votes).toBe(15)
+    })
+  })
+});
