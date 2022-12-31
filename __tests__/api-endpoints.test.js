@@ -664,7 +664,7 @@ describe("GET /api/users/:username - Sad path", () => {
   });
 });
 
-describe("PATCH /api/comments/:comment_id", () => {
+describe("PATCH /api/comments/:comment_id - Happy path", () => {
   test("responds with all of the updated comment elements", () => {
     const voteObj = {
       inv_votes: 12,
@@ -674,7 +674,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send(voteObj)
       .expect(200)
       .then(({ body: { comment } }) => {
-        expect(comment.rows[0]).toEqual({
+        expect(comment[0]).toEqual({
           comment_id: expect.any(Number),
           body: expect.any(String),
           votes: expect.any(Number),
@@ -693,7 +693,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send(voteObj)
       .expect(200)
       .then(({ body: { comment } }) => {
-        expect(comment.rows.length).toBe(1);
+        expect(comment.length).toBe(1);
       });
   });
   test("checks patch request has updated the comment's vote with a postive number", () => {
@@ -705,7 +705,7 @@ describe("PATCH /api/comments/:comment_id", () => {
     .send(voteObj)
     .expect(200)
     .then(({ body: { comment } }) => {
-      expect(comment.rows[0].votes).toBe(15)
+      expect(comment[0].votes).toBe(15)
     })
   })
   test("checks patch request has updated the comment's vote with a negative number", () => {
@@ -717,7 +717,56 @@ describe("PATCH /api/comments/:comment_id", () => {
     .send(voteObj)
     .expect(200)
     .then(({ body: { comment } }) => {
-      expect(comment.rows[0].votes).toBe(15)
+      expect(comment[0].votes).toBe(15)
     })
   })
+});
+
+describe("PATCH /api/comments/:comment_id - Sad path", () => {
+  test("tests for a comment_id that is not a valid number", () => {
+    const voteObj = {
+      inv_votes: 6,
+    };
+    return request(app)
+      .patch("/api/comments/49T9B9W343gm3")
+      .send(voteObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for a comment_id that is not a valid number", () => {
+    const voteObj = {
+      inv_votes: 6,
+    };
+    return request(app)
+      .patch("/api/comments/451647")
+      .send(voteObj)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found");
+      });
+  });
+  test("tests for an incorrect data type provided for vote entry", () => {
+    const voteObj = {
+      inv_votes: "string",
+    };
+    return request(app)
+      .patch("/api/comments/4")
+      .send(voteObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
+  test("tests for not enough data provided for vote entry", () => {
+    const voteObj = {};
+    return request(app)
+      .patch("/api/comments/4")
+      .send(voteObj)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request");
+      });
+  });
 });

@@ -110,11 +110,11 @@ const alterCommentVotes = (request, response, next) => {
   changeCommentVotes(request.body.inv_votes, request.params.comment_id).then((comment) => {
     response.status(200).send({comment: comment})
   })
+  .catch(next)
 }
 const listEndpoints = (request, response, next) => {
     response.status(200).send({endpoints: apiEndpoints()})
 }
-
 
 
 module.exports = { 

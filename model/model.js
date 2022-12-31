@@ -238,8 +238,8 @@ const changeCommentVotes = (votes, commentId) => {
   WHERE comment_id = $2
   RETURNING *
   `, [votes, commentId])
-  .then((comment) => {
-    if (comment.rowCount === 0) {
+  .then(( {rows: comment}) => {
+    if (comment.length === 0) {
       return Promise.reject({
         msg: "404 - Not found"
       })
@@ -247,6 +247,7 @@ const changeCommentVotes = (votes, commentId) => {
     return comment
   })
 }
+
 
 module.exports = { 
     findAllTopics, 
