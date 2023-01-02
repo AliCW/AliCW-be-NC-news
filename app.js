@@ -8,7 +8,7 @@ const {
 app.use(express.json());
 
 app.use("/api", apiRouter)
-
+                              
 app.all("/*", (request, response, next) => {
   response.status(404).send({ msg: "404 - Not found" });
   next();

@@ -10,12 +10,13 @@ const {
   findArticlesByOrderBy,
   deleteComment,
   findUserByQuery,
+  changeCommentVotes,
 } = require("../model/model")
 
 const { 
   apiEndpoints, 
 } = require("../model/endpoint-model")
-const { request } = require("../app")
+const { request, response } = require("../app")
 
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
@@ -105,6 +106,12 @@ const findUser = (request, response, next) => {
   .catch(next)
 }
 
+const alterCommentVotes = (request, response, next) => {
+  changeCommentVotes(request.body.inv_votes, request.params.comment_id).then((comment) => {
+    response.status(200).send({comment: comment})
+  })
+  .catch(next)
+}
 const listEndpoints = (request, response, next) => {
     response.status(200).send({endpoints: apiEndpoints()})
 }
@@ -121,4 +128,5 @@ module.exports = {
     deleteCommentById,
     listEndpoints,
     findUser,
+    alterCommentVotes
     }

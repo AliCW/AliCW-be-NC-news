@@ -174,7 +174,7 @@ const postCommentById = (username, body, article_id) => {
 const assignVotes = (body, params) => {
   return db.query(
     `UPDATE articles
-    SET votes = $1
+    SET votes = votes + $1
     WHERE article_id = $2
     RETURNING *;`, [body, params]
   )
@@ -231,6 +231,24 @@ const findUserByQuery = (params) => {
   })
 }
 
+const changeCommentVotes = (votes, commentId) => {
+  return db.query(`
+  UPDATE comments
+  SET votes = votes + $1
+  WHERE comment_id = $2
+  RETURNING *
+  `, [votes, commentId])
+  .then(( {rows: comment}) => {
+    if (comment.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return comment
+  })
+}
+
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -243,4 +261,5 @@ module.exports = {
     findArticlesByOrderBy,
     deleteComment,
     findUserByQuery, 
+    changeCommentVotes,
 };
