@@ -157,7 +157,7 @@ const postCommentById = (username, body, article_id) => {
     (author, body, article_id)
     VALUES 
     ($1, $2, $3)
-    RETURNING author, body;
+    RETURNING author, body, comment_id;
   `,
       [username, body, article_id]
     )

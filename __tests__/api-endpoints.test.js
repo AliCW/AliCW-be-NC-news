@@ -225,6 +225,7 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
         expect(comment.postedComment[0].body).toBe(
           "might be the best api i have ever seen in my life"
         );
+        expect(comment.postedComment[0].comment_id).toEqual(expect.any(Number))
       });
   });
   test("responds with a single comment response only", () => {
@@ -255,6 +256,7 @@ describe("POST - /api/articles/:article_id/comments (server responds with a 201 
         expect(Object.keys(comment.postedComment[0])).toEqual([
           "author",
           "body",
+          "comment_id"
         ]);
       });
   });
