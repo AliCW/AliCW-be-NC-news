@@ -141,6 +141,7 @@ const apiEndpoints = () => {
           example: {
             username: "mrcomment456",
             body: "this is a comment somehow",
+            comment_id: 1234
           },
         },
       },
