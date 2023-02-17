@@ -8,59 +8,93 @@ The base link for the hosted api is below:
 
     https://nc-news-acw.onrender.com
 
-# Endpoints
+## Endpoints
 
 The numerous endpoints are listed here:
 
+1.
+    
     GET /api
     (provides an in depth list of endpoint information)
     https://nc-news-acw.onrender.com/api/
+
+2.
 
     GET /api/topics
     (provides a list of article topics with a description & slug tag)
     https://nc-news-acw.onrender.com/api/topics
 
+3.
+
+
     GET /api/articles
     (provides all articles associated with the api)
     https://nc-news-acw.onrender.com/api/articles
+
+4.
+
 
     GET /api/articles?topic=query-here
     (provides all articles associated with the given topic)
     https://nc-news-acw.onrender.com/api/articles?topic=coding
 
+5.
+
+
     GET /api/articles?sort_by=query-here
     (provides all articles associated with the apo sorted by the given query)
     https://nc-news-acw.onrender.com/api/articles?sort_by=author
+
+6.
+
 
     GET /api/articles?sort_by=query-here&order_by=query-here
     (provides all articles associated with the apo sorted by the given query & ordered by another query)
     https://nc-news-acw.onrender.com/api/articles?sort_by=author&order_by=asc
 
+7.
+
+
     GET /api/articles/:article_id
     (provides a specific article by article_id)
     https://nc-news-acw.onrender.com/api/articles/3
+
+8.
+
 
     GET /api/articles/:article_id/comments
     (provides comments for the article_id provided)
     https://nc-news-acw.onrender.com/api/articles/3/comments
 
+9.
+
+
     GET /api/users
     (provides the username, name & avatar url for all users)
     https://nc-news-acw.onrender.com/api/users
+
+10.
+
 
     POST /api/articles/:article_id/comments
     (posts a comment on the associated article)
     https://nc-news-acw.onrender.com/api/articles/3/comments
 
+11.
+
+
     PATCH /api/articles/:article_id
     (updates the given article & returns it)
     https://nc-news-acw.onrender.com/api/articles/3
+
+12.
+
 
     DELETE /api/comments/:comment_id
     (deletes the associated comment)
     https://nc-news-acw.onrender.com/api/comments/3
 
-# Developer Setup
+## Developer Setup
 
 1. Clone the repository by copying the latest https link & typing the below command:
 
@@ -91,18 +125,19 @@ The numerous endpoints are listed here:
 
 5. The api was written using node.js version 19.0.0 & psql version 14.5. Installing these distributions or later (if available) is advised
 
-# Testing
+## Testing
 
-To run testing functionality, you can run the below command in the repo root to run all the tests in __tests__/
+1. To run testing functionality, you can run the below command in the repo root to run all the tests in __tests__/
 
-
+    ```bash
     # run all tests
     npm run test
+    ```
 
+2. If you want to run a specific test file, navigate into __tests__/ and specify the file in question
 
-If you want to run a specific test file, navigate into __tests__/ and specify the file in question
-
+    ```bash
     # run all tests
     cd __tests__/
     npm test api-endpoints.test.js
-
+    ```
