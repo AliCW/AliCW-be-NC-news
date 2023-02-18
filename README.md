@@ -12,87 +12,90 @@ The base link for the hosted api is below:
 
 The numerous endpoints are listed here:
 
-1.
+   
+1. GET /api 
+(provides an in depth list of endpoint information)
     
-    GET /api
-    (provides an in depth list of endpoint information)
+    ```bash
     https://nc-news-acw.onrender.com/api/
+    ```
 
-2.
+2. GET /api/topics
+(provides a list of article topics with a description & slug tag)
 
-    GET /api/topics
-    (provides a list of article topics with a description & slug tag)
+    ```bash
     https://nc-news-acw.onrender.com/api/topics
+    ```
 
-3.
+3. GET /api/articles
+(provides all articles associated with the api)
 
-
-    GET /api/articles
-    (provides all articles associated with the api)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles
+    ```
 
-4.
+4. GET /api/articles?topic=<query-here>
+(provides all articles associated with the given topic)
 
-
-    GET /api/articles?topic=query-here
-    (provides all articles associated with the given topic)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles?topic=coding
+    ```
 
-5.
-
-
-    GET /api/articles?sort_by=query-here
-    (provides all articles associated with the apo sorted by the given query)
+5. GET /api/articles?sort_by=<query-here>
+(provides all articles associated with the apo sorted by the given query)
+    
+    ```bash
     https://nc-news-acw.onrender.com/api/articles?sort_by=author
+    ```
 
-6.
+6. GET /api/articles?sort_by=<query-here>&order_by=<query-here>
+(provides all articles associated with the apo sorted by the given query & ordered by another query)
 
-
-    GET /api/articles?sort_by=query-here&order_by=query-here
-    (provides all articles associated with the apo sorted by the given query & ordered by another query)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles?sort_by=author&order_by=asc
+    ```
 
-7.
+7. GET /api/articles/:article_id
+(provides a specific article by article_id)
 
-
-    GET /api/articles/:article_id
-    (provides a specific article by article_id)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles/3
+    ```
 
-8.
+8. GET /api/articles/:article_id/comments
+(provides comments for the article_id provided)
 
-
-    GET /api/articles/:article_id/comments
-    (provides comments for the article_id provided)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles/3/comments
+    ```
 
-9.
+9. GET /api/users
+(provides the username, name & avatar url for all users)
 
-
-    GET /api/users
-    (provides the username, name & avatar url for all users)
+    ```bash
     https://nc-news-acw.onrender.com/api/users
+    ```
 
-10.
+10. POST /api/articles/:article_id/comments
+(posts a comment on the associated article)
 
-
-    POST /api/articles/:article_id/comments
-    (posts a comment on the associated article)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles/3/comments
+    ```
 
-11.
+11. PATCH /api/articles/:article_id
+(updates the given article & returns it)
 
-
-    PATCH /api/articles/:article_id
-    (updates the given article & returns it)
+    ```bash
     https://nc-news-acw.onrender.com/api/articles/3
+    ```
 
-12.
+12. DELETE /api/comments/:comment_id
+(deletes the associated comment)
 
-
-    DELETE /api/comments/:comment_id
-    (deletes the associated comment)
+    ```bash
     https://nc-news-acw.onrender.com/api/comments/3
+    ```
 
 ## Developer Setup
 
@@ -105,9 +108,15 @@ The numerous endpoints are listed here:
 
 2. Please create .env.development (& if required .env.test) files in the root of the repo so as to connect to the database. The file should contain the below information:
 
-    .env.development - PGDATABASE=nc_news
+    ### .env.development
+    ```bash
+    PGDATABASE=nc_news
+    ```
 
-    .env.test - PGDATABASE=nc_news_test
+    ### .env.test
+    ```bash
+    PGDATABASE=nc_news_test
+    ```
 
 3. Install the npm package dependencies by running the below command in the root of the repo:
 
