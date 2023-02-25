@@ -11,6 +11,7 @@ const {
   deleteComment,
   findUserByQuery,
   changeCommentVotes,
+  addUser,
 } = require("../model/model")
 
 const { 
@@ -116,6 +117,28 @@ const listEndpoints = (request, response, next) => {
     response.status(200).send({endpoints: apiEndpoints()})
 }
 
+const userSignup = (request, response, next) => {
+  const { username, user, password, avatar_url } = request.body
+  addUser(username, user, avatar_url).then((user) => {
+    response.status(201).send({user: user})
+  })
+  .catch(next)
+}
+
+
+
+
+  // const postArticleComment = (request, response, next) => {
+    //   const { username, body } = request.body
+
+    //   postCommentById(username, body, request.params.article_id)
+    
+    //   .then((postedComment) => {
+    //     response.status(201).send({postedComment})
+    //   })
+    //   .catch(next)
+    // }
+    
 
 module.exports = { 
     listTopics, 
@@ -128,5 +151,9 @@ module.exports = {
     deleteCommentById,
     listEndpoints,
     findUser,
-    alterCommentVotes
+    alterCommentVotes,
+    userSignup,
     }
+
+
+  
