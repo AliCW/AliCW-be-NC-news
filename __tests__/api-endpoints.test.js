@@ -773,20 +773,20 @@ describe("PATCH /api/comments/:comment_id - Sad path", () => {
   });
 });
 
-describe.only("POST - /api/users/signup (server responds with a 201 & success message)", () => {
-  test("tests the new user has been added to the database", () => {
-    const userObj = {
-      username: "cbeachdude",
-      name: "chris_hansen",
-      password: "l.Armstr0ng",
-      avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
-    }
-    return request(app)
-    .post("/api/users/signup")
-    .send(userObj)
-    .expect(201)
-    .then(({ body: { msg } }) => {
-      console.log(msg)
-    })
-  })
-})
+// describe.only("POST - /api/users/signup (server responds with a 201 & success message)", () => {
+//   test("tests the new user has been added to the database", () => {
+//     const userObj = {
+//       username: "cbeachdude",
+//       name: "chris_hansen",
+//       password: "l.Armstr0ng",
+//       avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
+//     }
+//     return request(app)
+//     .post("/api/users/signup")
+//     .send(userObj)
+//     .expect(201)
+//     .then(({ body: { msg } }) => {
+//       console.log(msg)
+//     })
+//   })
+// })
