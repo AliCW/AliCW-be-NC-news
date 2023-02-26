@@ -14,6 +14,8 @@ const {
   addUser,
 } = require("../model/model")
 
+const bcrypt = require("bcrypt")
+
 const { 
   apiEndpoints, 
 } = require("../model/endpoint-model")
@@ -118,27 +120,20 @@ const listEndpoints = (request, response, next) => {
 }
 
 const userSignup = (request, response, next) => {
-  const { username, user, password, avatar_url } = request.body
-  addUser(username, user, avatar_url).then((user) => {
-    response.status(201).send({user: user})
-  })
-  .catch(next)
-}
+  if (!request.body.password === true) {
+    return response.status(400).send({ body: "400 - Bad request"})
+  }
+  return bcrypt
+    .hash(request.body.password, 10)
+    .then((hash) => {
+      const { username, name, avatar_url } = request.body;
+      addUser(username, name, hash, avatar_url).then((result) => {
+        response.status(201).send({ userObject: result });
+      });
+    })
+    .catch(next);
+};
 
-
-
-
-  // const postArticleComment = (request, response, next) => {
-    //   const { username, body } = request.body
-
-    //   postCommentById(username, body, request.params.article_id)
-    
-    //   .then((postedComment) => {
-    //     response.status(201).send({postedComment})
-    //   })
-    //   .catch(next)
-    // }
-    
 
 module.exports = { 
     listTopics, 

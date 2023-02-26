@@ -773,20 +773,56 @@ describe("PATCH /api/comments/:comment_id - Sad path", () => {
   });
 });
 
-// describe.only("POST - /api/users/signup (server responds with a 201 & success message)", () => {
-//   test("tests the new user has been added to the database", () => {
-//     const userObj = {
-//       username: "cbeachdude",
-//       name: "chris_hansen",
-//       password: "l.Armstr0ng",
-//       avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
-//     }
-//     return request(app)
-//     .post("/api/users/signup")
-//     .send(userObj)
-//     .expect(201)
-//     .then(({ body: { msg } }) => {
-//       console.log(msg)
-//     })
+describe("POST - /api/users/signup (server responds with a 201 & success message) - Happy Path", () => {
+  test("tests the new user object has been added to the database", () => {
+    const userObj = {
+      username: "cbeachdude",
+      name: "chris_hansen",
+      password: "l.Armstr0ng",
+      avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
+    }
+    return request(app)
+    .post("/api/users/signup")
+    .send(userObj)
+    .expect(201)
+    .then(({ body: msg }) => {
+      expect(Array.isArray(msg.userObject)).toBe(true)
+      expect(typeof msg.userObject[0]).toBe("object")
+    })
+  })
+    test("tests the new user object password is hashed & not stored server side", () => {
+      const userObj = {
+        username: "cbeachdude",
+        name: "chris_hansen",
+        password: "l.Armstr0ng",
+        avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
+      }
+      return request(app)
+      .post("/api/users/signup")
+      .send(userObj)
+      .expect(201)
+      .then(({ body: msg }) => {
+        expect(msg.userObject[0].password).not.toBe("l.Armstr0ng")
+        expect(msg.userObject[0].password.slice(0, 7)).toBe("$2b$10$")
+      })
+  })
+})
+
+describe("POST - /api/users/signup (server responds with a failure messages - most if not all will be dealt with on the FE) - Sad Path", () => {
+  test("testing for not incorrect password supplied via no data", () => {
+    const userObj = {}
+    return request(app)
+    .post("/api/users/signup")
+    .send(userObj)
+    .expect(400)
+    .then(({ body: msg }) => {
+      expect(msg.body).toBe("400 - Bad request");
+    })
+  })
+})
+
+// describe("POST - /api/users/login (server responds with 201 success messages", () => {
+//   test("testing for successful receipt of login message", () => {
+
 //   })
 // })

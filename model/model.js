@@ -104,7 +104,6 @@ const findArticlesByOrderBy = (query) => {
 
 }
 
-
 const findArticleById = (params) => {
   return db
     .query(
@@ -248,40 +247,25 @@ const changeCommentVotes = (votes, commentId) => {
   })
 }
 
-const addUser = (username, user, avatar_url) => {
-  console.log(username, user, avatar_url, '<<<')
+const addUser = (username, name, password, avatar_url) => {
+  
   return db.query(
     `INSERT INTO users
-    (username, name, avatar_url)
+    (username, name, password, avatar_url)
     VALUES
-    ($1, $2, $3)
-    RETURNING name;
+    ($1, $2, $3, $4)
+    RETURNING username, name, password;
     `,
-    []
-  )
+    [username, name, password, avatar_url])
+    .then(( {rows: comment}) => {
+      if (comment.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found"
+        })
+      }
+      return comment
+    })
 }
-
-// const postCommentById = (username, body, article_id) => {
-//   return db
-//     .query(
-//       `INSERT INTO comments
-//     (author, body, article_id)
-//     VALUES 
-//     ($1, $2, $3)
-//     RETURNING author, body, comment_id;
-//   `,
-//       [username, body, article_id]
-//     )
-//     .then(({ rows: comment }) => {
-//       if (comment.length === 0) {
-//         return Promise.reject({
-//           msg: "404 - Not found",
-//         });
-//       }
-//       return comment;
-//     });
-// };
-
 
 module.exports = { 
     findAllTopics, 
