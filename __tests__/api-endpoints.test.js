@@ -820,9 +820,3 @@ describe("POST - /api/users/signup (server responds with a failure messages - mo
     })
   })
 })
-
-// describe("POST - /api/users/login (server responds with 201 success messages", () => {
-//   test("testing for successful receipt of login message", () => {
-
-//   })
-// })
