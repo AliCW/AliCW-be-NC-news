@@ -104,7 +104,6 @@ const findArticlesByOrderBy = (query) => {
 
 }
 
-
 const findArticleById = (params) => {
   return db
     .query(
@@ -248,6 +247,25 @@ const changeCommentVotes = (votes, commentId) => {
   })
 }
 
+const addUser = (username, name, password, avatar_url) => {
+  
+  return db.query(
+    `INSERT INTO users
+    (username, name, password, avatar_url)
+    VALUES
+    ($1, $2, $3, $4)
+    RETURNING username, name, password;
+    `,
+    [username, name, password, avatar_url])
+    .then(( {rows: comment}) => {
+      if (comment.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found"
+        })
+      }
+      return comment
+    })
+}
 
 module.exports = { 
     findAllTopics, 
@@ -262,4 +280,5 @@ module.exports = {
     deleteComment,
     findUserByQuery, 
     changeCommentVotes,
+    addUser,
 };
