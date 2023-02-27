@@ -59,7 +59,7 @@ describe("testing functionality of index.js exportation of topicData", () => {
   describe("testing functionality of index.js exportation of userData", () => {
     test("userData exportation lists an array of user data objects", () => {
       expect(index.userData).toBeInstanceOf(Array);
-      expect(index.userData).toHaveLength(4);
+      expect(index.userData).toHaveLength(5);
     });
     test("userData exportation responds with all topic object keys", () => {
       const randomIndex = Math.floor(Math.random() * 3);

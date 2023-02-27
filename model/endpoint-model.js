@@ -145,7 +145,8 @@ const apiEndpoints = () => {
           },
         },
       },
-        {"/api/users/signup": {
+        {
+          "/api/users/signup": {
           path: "POST /api/users",
           description: `allows users to sign up to the website, username, name, password & avatar_url fields are accepted.
             passwords are hashed & not stored on any server`,
@@ -164,6 +165,18 @@ const apiEndpoints = () => {
           },
         },
       },
+        {
+          "/api/users/login": {
+            path: "POST /api/users/login",
+            description: `allows users to login to their account, SQL hash is compared to password provided by the user`,
+            queries: [],
+            examplePost: {
+              username: "cbeachdude",
+              password: "l.Armstr0ng",
+            },
+            example: true || false,
+          }
+        },
     ],
     PATCH: [
       {

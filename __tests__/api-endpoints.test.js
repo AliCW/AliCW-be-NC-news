@@ -1,7 +1,7 @@
 const testData = require("../db/data/test-data/index.js");
 const request = require("supertest");
 const app = require("../app");
-
+const bcrypt = require("bcrypt");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 
@@ -459,7 +459,7 @@ describe("GET - /api/users - returns an array of objects containing user data - 
       .get("/api/users")
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users.length).toBe(4);
+        expect(users.length).toBe(5);
         expect(users).toBeSortedBy("username", { ascending: true });
       });
   });
@@ -776,7 +776,7 @@ describe("PATCH /api/comments/:comment_id - Sad path", () => {
 describe("POST - /api/users/signup (server responds with a 201 & success message) - Happy Path", () => {
   test("tests the new user object has been added to the database", () => {
     const userObj = {
-      username: "cbeachdude",
+      username: "su-fong",
       name: "chris_hansen",
       password: "l.Armstr0ng",
       avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
@@ -792,7 +792,7 @@ describe("POST - /api/users/signup (server responds with a 201 & success message
   })
     test("tests the new user object password is hashed & not stored server side", () => {
       const userObj = {
-        username: "cbeachdude",
+        username: "su-fong",
         name: "chris_hansen",
         password: "l.Armstr0ng",
         avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
@@ -817,6 +817,51 @@ describe("POST - /api/users/signup (server responds with a failure messages - mo
     .expect(400)
     .then(({ body: msg }) => {
       expect(msg.body).toBe("400 - Bad request");
+    })
+  })
+})
+
+describe("GET - /api/users/login (server responds with a 200 & success message) - Happy Path", () => {
+  test("tests the success of a login attempt", () => {
+    const userObj = {
+      username: "cbeachdude",
+      password: "l.Armstr0ng",
+          }
+    return request(app)
+    .post("/api/users/login")
+    .send(userObj)
+    .expect(200)
+    .then(({ body: msg }) => {
+        expect(msg.result).toBe(true)
+    })
+  })
+})
+
+describe("GET - /api/users/login (server responds with a 400 & failure message) - Sad Path", () => {
+  test("tests the failure of a login attempt - bad password", () => {
+    const userObj = {
+      username: "cbeachdude",
+      password: "this-is-the-wrong-password"
+    }
+    return request(app)
+    .post("/api/users/login")
+    .send(userObj)
+    .expect(401)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("401 - Unauthorized")
+    })
+  })
+  test("tests the failure of a login attempt - wrong username", () => {
+    const userObj = {
+      username: "hamishmcdougal",
+      password: "l.Armstr0ng"
+    }
+    return request(app)
+    .post("/api/users/login")
+    .send(userObj)
+    .expect(401)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("401 - Unauthorized")
     })
   })
 })
