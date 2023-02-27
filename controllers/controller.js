@@ -12,6 +12,7 @@ const {
   findUserByQuery,
   changeCommentVotes,
   addUser,
+  checkUser,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -19,7 +20,6 @@ const bcrypt = require("bcrypt")
 const { 
   apiEndpoints, 
 } = require("../model/endpoint-model")
-const { request, response } = require("../app")
 
 const listTopics = (request, response, next) => {
     findAllTopics(request.query).then((topics) => {
@@ -115,9 +115,6 @@ const alterCommentVotes = (request, response, next) => {
   })
   .catch(next)
 }
-const listEndpoints = (request, response, next) => {
-    response.status(200).send({endpoints: apiEndpoints()})
-}
 
 const userSignup = (request, response, next) => {
   if (!request.body.password === true) {
@@ -134,6 +131,23 @@ const userSignup = (request, response, next) => {
     .catch(next);
 };
 
+const userLogin = (request, response, next) => {
+
+  checkUser(request.body.username).then((result) => {
+   // console.log(request.body.password)
+   // console.log(result[0].password)
+    const check = bcrypt.compareSync(request.body.password, result[0].password)
+    if(check === true) {
+      response.status(200).send({result: check})
+    }
+  })
+  .catch(next)
+}
+
+const listEndpoints = (request, response, next) => {
+  response.status(200).send({endpoints: apiEndpoints()})
+}
+
 
 module.exports = { 
     listTopics, 
@@ -148,6 +162,7 @@ module.exports = {
     findUser,
     alterCommentVotes,
     userSignup,
+    userLogin
     }
 
 

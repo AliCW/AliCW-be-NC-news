@@ -267,6 +267,23 @@ const addUser = (username, name, password, avatar_url) => {
     })
 }
 
+const checkUser = (username) => {
+    return db.query(
+      `SELECT password 
+      FROM users
+      WHERE username = $1
+      `,
+      [username])
+      .then(({rows: comment}) => {
+        if (comment.length === 0) {
+          return Promise.reject({
+            msg: "404 - Not found"
+          })
+        }
+        return comment
+      })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -281,4 +298,5 @@ module.exports = {
     findUserByQuery, 
     changeCommentVotes,
     addUser,
+    checkUser,
 };

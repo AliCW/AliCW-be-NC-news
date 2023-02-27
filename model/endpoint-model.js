@@ -145,7 +145,8 @@ const apiEndpoints = () => {
           },
         },
       },
-        {"/api/users/signup": {
+        {
+          "/api/users/signup": {
           path: "POST /api/users",
           description: `allows users to sign up to the website, username, name, password & avatar_url fields are accepted.
             passwords are hashed & not stored on any server`,
