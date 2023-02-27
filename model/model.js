@@ -257,13 +257,13 @@ const addUser = (username, name, password, avatar_url) => {
     RETURNING username, name, password;
     `,
     [username, name, password, avatar_url])
-    .then(( {rows: comment}) => {
-      if (comment.length === 0) {
+    .then(( {rows: user}) => {
+      if (user.length === 0) {
         return Promise.reject({
           msg: "404 - Not found"
         })
       }
-      return comment
+      return user
     })
 }
 
@@ -274,13 +274,13 @@ const checkUser = (username) => {
       WHERE username = $1
       `,
       [username])
-      .then(({rows: comment}) => {
-        if (comment.length === 0) {
+      .then(({rows: user}) => {
+        if (user.length === 0) {
           return Promise.reject({
-            msg: "404 - Not found"
+            msg: "401 - Unauthorized"
           })
         }
-        return comment
+        return user
       })
 }
 

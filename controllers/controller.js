@@ -132,14 +132,10 @@ const userSignup = (request, response, next) => {
 };
 
 const userLogin = (request, response, next) => {
-
   checkUser(request.body.username).then((result) => {
-   // console.log(request.body.password)
-   // console.log(result[0].password)
     const check = bcrypt.compareSync(request.body.password, result[0].password)
-    if(check === true) {
-      response.status(200).send({result: check})
-    }
+    if(check === true) response.status(200).send({result: check})
+    if(check === false) response.status(401).send({msg: "401 - Unauthorized"})
   })
   .catch(next)
 }

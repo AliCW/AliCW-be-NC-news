@@ -846,12 +846,22 @@ describe("GET - /api/users/login (server responds with a 400 & failure message) 
     return request(app)
     .post("/api/users/login")
     .send(userObj)
-    .expect(400)
-    .then(({ body: msg }) => {
-      console.log(msg).toEqual({body: "400 - Bad request"})
+    .expect(401)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("401 - Unauthorized")
+    })
+  })
+  test("tests the failure of a login attempt - wrong username", () => {
+    const userObj = {
+      username: "hamishmcdougal",
+      password: "l.Armstr0ng"
+    }
+    return request(app)
+    .post("/api/users/login")
+    .send(userObj)
+    .expect(401)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("401 - Unauthorized")
     })
   })
 })
-
-
-//test for bad username

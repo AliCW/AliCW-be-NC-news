@@ -18,7 +18,10 @@ app.all("/*", (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-  if (
+  if (error.msg === "401 - Unauthorized"){
+    response.status(401).send({ msg: "401 - Unauthorized"}) 
+  }
+  else if (
     error.code === "22P02" ||
     error.code === "23502" ||
     error.code === "23503" ||
