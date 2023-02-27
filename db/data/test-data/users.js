@@ -31,8 +31,7 @@ module.exports = [
     password: '$2b$10$4cWEGJCav6gQNI8uoYh70evQqZUXjmOkouDjSl066P4Jg5nYrNV7u',
     avatar_url:
       'https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png'
-
-}
-  ];
+  }
+];
 
 
