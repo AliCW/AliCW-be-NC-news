@@ -284,6 +284,20 @@ const checkUser = (username) => {
       })
 }
 
+const checkUsernameExists = (username) => {
+      return db.query(
+        `SELECT username
+        FROM users
+        WHERE username = $1
+        `, [username])
+        .then(({rows: user}) => {
+          if (user.length === 0) {
+            return false; //<--user does not exist
+          }
+          return true //<--user found
+      })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -299,4 +313,5 @@ module.exports = {
     changeCommentVotes,
     addUser,
     checkUser,
+    checkUsernameExists,
 };

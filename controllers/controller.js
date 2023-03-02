@@ -13,6 +13,7 @@ const {
   changeCommentVotes,
   addUser,
   checkUser,
+  checkUsernameExists,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -116,19 +117,34 @@ const alterCommentVotes = (request, response, next) => {
   .catch(next)
 }
 
-const userSignup = (request, response, next) => {
-  if (!request.body.password === true) {
-    return response.status(400).send({ body: "400 - Bad request"})
+
+async function userSignup(request, response, next){
+  const passwordHash = (password) => {
+    return bcrypt.hash(password, 10)
   }
-  return bcrypt
-    .hash(request.body.password, 10)
-    .then((hash) => {
-      const { username, name, avatar_url } = request.body;
-      addUser(username, name, hash, avatar_url).then((result) => {
-        response.status(201).send({ userObject: result });
-      });
-    })
-    .catch(next);
+  const detectDuplicateUser = (username) => {
+    return checkUsernameExists(username)
+  }
+
+  try {
+    if (!request.body.password === true) {
+      return response.status(400).send({ body: "400 - Bad request"})
+    }
+
+    const detectDuplicateUsername = await detectDuplicateUser(request.body.username)
+
+    if (detectDuplicateUsername === true) {
+      return response.status(409).send({ body: "409 - Conflict"})
+    }
+
+    const passHash = await passwordHash(request.body.password, 10)
+    const { username, name, avatar_url } = request.body;
+    const signupUser = await addUser(username, name, passHash, avatar_url)
+
+    return response.status(201).send({ userObject: signupUser })
+  } catch(error) {
+    return next
+  }
 };
 
 const userLogin = (request, response, next) => {
@@ -158,7 +174,7 @@ module.exports = {
     findUser,
     alterCommentVotes,
     userSignup,
-    userLogin
+    userLogin,
     }
 
 
