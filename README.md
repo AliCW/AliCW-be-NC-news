@@ -83,14 +83,26 @@ The numerous endpoints are listed here:
     https://nc-news-acw.onrender.com/api/articles/3/comments
     ```
 
-11. PATCH /api/articles/:article_id
+11. POST /api/users/signup
+    (allows the user to sign up to the site - sign up is required to vote & comment)
+    ```bash
+    https://nc-news-acw.onrender.com/api/users/signup
+    ```
+
+12. POST /api/users/login
+    (allows the user to login to the site)
+    ```bash
+    https://nc-news-acw.onrender.com/api/users/login
+    ```
+
+13. PATCH /api/articles/:article_id
 (updates the given article & returns it)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-12. DELETE /api/comments/:comment_id
+14. DELETE /api/comments/:comment_id
 (deletes the associated comment)
 
     ```bash
