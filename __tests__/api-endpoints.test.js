@@ -778,6 +778,7 @@ describe("POST - /api/users/signup (server responds with a 201 & success message
       username: "su-fong",
       name: "chris_hansen",
       password: "l.Armstr0ng",
+      email: "mcMinstrel@gmail.com",
       avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
     }
     return request(app)
@@ -794,6 +795,7 @@ describe("POST - /api/users/signup (server responds with a 201 & success message
         username: "su-fong",
         name: "chris_hansen",
         password: "l.Armstr0ng",
+        email: "mcMinstrel@gmail.com",
         avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
       }
       return request(app)
@@ -836,6 +838,7 @@ describe("POST - /api/users/signup (server responds with a failure messages - mo
       username: "cbeachdude",
       name: "hansen chris",
       password: "l.Armstr0ng",
+      email: "mcMinstrel@gmail.com",
       avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
     }
     return request(app)
@@ -843,6 +846,22 @@ describe("POST - /api/users/signup (server responds with a failure messages - mo
     .send(userObj)
     .expect(409)
     .then(({body: msg}) => {
+      expect(msg.body).toBe("409 - Conflict")
+    })
+  })
+  test("tests the failure of a login attempt - duplicate email address provided", () => {
+    const userObj = {
+      username: "JamSaxon",
+      name: "Sam Jaxon",
+      password: "Pass-123",
+      email: "chris_hansen@gmail.com",
+      avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
+    }
+    return request(app)
+    .post("/api/users/signup")
+    .send(userObj)
+    .expect(409)
+    .then(({ body: msg }) => {
       expect(msg.body).toBe("409 - Conflict")
     })
   })
