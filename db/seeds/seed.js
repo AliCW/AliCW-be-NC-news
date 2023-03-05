@@ -23,6 +23,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     username VARCHAR PRIMARY KEY,
     name VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
+    email VARCHAR NOT NULL, 
     avatar_url VARCHAR
   );`);
 
@@ -58,11 +59,12 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     .then((result) => result.rows);
 
   const insertUsersQueryStr = format(
-    'INSERT INTO users ( username, name, password, avatar_url) VALUES %L RETURNING *;',
-    userData.map(({ username, name, password, avatar_url }) => [
+    'INSERT INTO users ( username, name, password, email, avatar_url) VALUES %L RETURNING *;',
+    userData.map(({ username, name, password, email, avatar_url }) => [
       username,
       name,
       password,
+      email,
       avatar_url,
     ])
   );

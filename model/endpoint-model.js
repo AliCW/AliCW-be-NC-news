@@ -148,19 +148,21 @@ const apiEndpoints = () => {
         {
           "/api/users/signup": {
           path: "POST /api/users/signup",
-          description: `allows users to sign up to the website, username, name, password & avatar_url fields are accepted.
+          description: `allows users to sign up to the website, username, name, password, email & avatar_url fields are accepted.
             passwords are hashed & not stored on any server`,
           queries: [],
           examplePost: {
             username: "cbeachdude",
             name: "chris_hansen",
             password: "l.Armstr0ng",
+            email: "chris_hansen@gmail.com",
             avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
           },
           example: {
             username: "cbeachdude",
             name: "chris_hansen",
             password: "$2b$10$XOdxIsMox0SJRIhF0AyqG.StyvhDvssLALjiTTH8knPXeoq/EtQMu",
+            email: "chris_hansen@gmail.com",
             avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
           },
         },

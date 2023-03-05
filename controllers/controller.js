@@ -14,6 +14,7 @@ const {
   addUser,
   checkUser,
   checkUsernameExists,
+  checkEmailExists,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -126,15 +127,23 @@ async function userSignup(request, response, next){
     return checkUsernameExists(username)
   }
 
+  const detectDuplicateEmail = (email) => {
+    return checkEmailExists(email)
+  }
+
   try {
     if (!request.body.password === true) {
       return response.status(400).send({ body: "400 - Bad request"})
     }
 
     const detectDuplicateUsername = await detectDuplicateUser(request.body.username)
-
     if (detectDuplicateUsername === true) {
       return response.status(409).send({ body: "409 - Conflict"})
+    }
+
+    const detectDuplicateEmailAdd = await detectDuplicateEmail(request.body.email)
+    if (detectDuplicateEmailAdd === true) {
+      return response.status(409).send({ body: "409 - Conflict" })
     }
 
     const passHash = await passwordHash(request.body.password, 10)

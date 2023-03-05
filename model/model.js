@@ -247,16 +247,15 @@ const changeCommentVotes = (votes, commentId) => {
   })
 }
 
-const addUser = (username, name, password, avatar_url) => {
-  
+const addUser = (username, name, password, email, avatar_url) => {
   return db.query(
     `INSERT INTO users
-    (username, name, password, avatar_url)
+    (username, name, password, email, avatar_url)
     VALUES
-    ($1, $2, $3, $4)
+    ($1, $2, $3, $4, $5)
     RETURNING username, name, password;
     `,
-    [username, name, password, avatar_url])
+    [username, name, password, email, avatar_url])
     .then(( {rows: user}) => {
       if (user.length === 0) {
         return Promise.reject({
@@ -294,7 +293,21 @@ const checkUsernameExists = (username) => {
           if (user.length === 0) {
             return false; //<--user does not exist
           }
-          return true //<--user found
+          return true; //<--user found
+      })
+}
+
+const checkEmailExists = (email) => {
+    return db.query(
+      `SELECT email
+      FROM users
+      WHERE email = $1
+      `, [email])
+      .then(({ rows: user }) => {
+        if (user.length === 0) {
+          return false;
+        }
+        return true;
       })
 }
 
@@ -314,4 +327,5 @@ module.exports = {
     addUser,
     checkUser,
     checkUsernameExists,
+    checkEmailExists,
 };
