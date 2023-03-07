@@ -790,6 +790,32 @@ describe("POST - /api/users/signup (server responds with a 201 & success message
       expect(typeof msg.userObject[0]).toBe("object")
     })
   })
+  test("tests the new user returns username, name, password(hash), email & avatar_url", () => {
+    const userObj = {
+      username: "su-fong",
+      name: "chris_hansen",
+      password: "l.Armstr0ng",
+      email: "mcMinstrel@gmail.com",
+      avatar_url: "https://e7.pngegg.com/pngimages/369/132/png-clipart-man-in-black-suit-jacket-chris-hansen-to-catch-a-predator-television-show-nbc-news-chris-benoit-miscellaneous-television.png"
+    }
+    return request(app)
+    .post("/api/users/signup")
+    .send(userObj)
+    .expect(201)
+    .then(({ body: msg }) => {
+      msg.userObject.forEach((keyValue) => {
+        expect(keyValue).toEqual(
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            password: expect.any(String),
+            email: expect.any(String),
+            avatar_url: expect.any(String)
+          })
+          )
+      })
+    })
+  })
     test("tests the new user object password is hashed & not stored server side", () => {
       const userObj = {
         username: "su-fong",
