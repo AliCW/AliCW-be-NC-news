@@ -253,7 +253,7 @@ const addUser = (username, name, password, email, avatar_url) => {
     (username, name, password, email, avatar_url)
     VALUES
     ($1, $2, $3, $4, $5)
-    RETURNING username, name, password;
+    RETURNING *;
     `,
     [username, name, password, email, avatar_url])
     .then(( {rows: user}) => {

@@ -147,9 +147,8 @@ async function userSignup(request, response, next){
     }
 
     const passHash = await passwordHash(request.body.password, 10)
-    const { username, name, avatar_url } = request.body;
-    const signupUser = await addUser(username, name, passHash, avatar_url)
-
+    const { username, name, email, avatar_url } = request.body;
+    const signupUser = await addUser(username, name, passHash, email, avatar_url)
     return response.status(201).send({ userObject: signupUser })
   } catch(error) {
     return next
