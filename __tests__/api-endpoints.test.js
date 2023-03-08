@@ -937,3 +937,33 @@ describe("GET - /api/users/login (server responds with a 400 & failure message) 
     })
   })
 })
+
+describe.only("POST - /api/articles - adds a new article to the database - happy path", () => {
+  test("tests the new article has been added to the database & all keys are present", () => {
+    const article = {
+      username: "cbeachdude",
+      title: "Riverside, California",
+      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      topic: "mitch",
+    }   
+    return request(app)
+    .post("/api/articles")
+    .send(article)
+    .expect(201)
+    .then(({ body: msg}) => {
+      msg.article.forEach((keyValue) => {
+        expect(keyValue).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number)
+          })
+        )
+      })
+    })
+  })
+})

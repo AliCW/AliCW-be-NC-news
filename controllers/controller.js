@@ -15,6 +15,7 @@ const {
   checkUser,
   checkUsernameExists,
   checkEmailExists,
+  submitArticle,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -164,6 +165,13 @@ const userLogin = (request, response, next) => {
   .catch(next)
 }
 
+const postArticle = (request, response, next) => {
+  const {username, title, body, topic, created_at, votes} = request.body
+    submitArticle(title, topic, username, body, created_at, votes).then((result) => {
+      response.status(201).send({article: result});
+    })
+}
+
 const listEndpoints = (request, response, next) => {
   response.status(200).send({endpoints: apiEndpoints()})
 }
@@ -183,6 +191,7 @@ module.exports = {
     alterCommentVotes,
     userSignup,
     userLogin,
+    postArticle,
     }
 
 

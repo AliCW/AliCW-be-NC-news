@@ -311,6 +311,25 @@ const checkEmailExists = (email) => {
       })
 }
 
+const submitArticle = (title, topic, author, body, votes = 0) => {
+  return db.query(
+    `INSERT INTO articles
+    (title, topic, author, body, votes)
+    VALUES
+    ($1, $2, $3, $4, $5)
+    RETURNING *;
+    `,
+    [title, topic, author, body, votes])
+    .then(({rows: article}) => {
+      if (article.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found"
+        })
+      }
+      return article
+    })
+}
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -328,4 +347,5 @@ module.exports = {
     checkUser,
     checkUsernameExists,
     checkEmailExists,
+    submitArticle,
 };
