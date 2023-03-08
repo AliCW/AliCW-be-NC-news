@@ -938,7 +938,7 @@ describe("GET - /api/users/login (server responds with a 400 & failure message) 
   })
 })
 
-describe.only("POST - /api/articles - adds a new article to the database - happy path", () => {
+describe("POST - /api/articles - adds a new article to the database - happy path", () => {
   test("tests the new article has been added to the database & all keys are present", () => {
     const article = {
       username: "cbeachdude",
