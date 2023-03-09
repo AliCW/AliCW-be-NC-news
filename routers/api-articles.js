@@ -7,6 +7,7 @@ const {
     findArticleComments,
     postArticleComment,
     addVotesToArticle,
+    postArticle,
  } = require("../controllers/controller")
 
  articlesRouter.get("/", listArticles)
@@ -16,6 +17,8 @@ const {
  articlesRouter.get("/:article_id/comments", findArticleComments)
 
  articlesRouter.post("/:article_id/comments", postArticleComment)
+
+ articlesRouter.post("/", postArticle)
 
  articlesRouter.patch("/:article_id", addVotesToArticle)
 

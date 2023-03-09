@@ -303,12 +303,31 @@ const checkEmailExists = (email) => {
       FROM users
       WHERE email = $1
       `, [email])
-      .then(({ rows: user }) => {
-        if (user.length === 0) {
+      .then(({ rows: email }) => {
+        if (email.length === 0) {
           return false;
         }
         return true;
       })
+}
+
+const submitArticle = (title, topic, author, body, votes = 0) => {
+  return db.query(
+    `INSERT INTO articles
+    (title, topic, author, body, votes)
+    VALUES
+    ($1, $2, $3, $4, $5)
+    RETURNING *;
+    `,
+    [title, topic, author, body, votes])
+    .then(({rows: article}) => {
+      if (article.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found"
+        })
+      }
+      return findArticleById(article[0].article_id)
+    })
 }
 
 module.exports = { 
@@ -328,4 +347,5 @@ module.exports = {
     checkUser,
     checkUsernameExists,
     checkEmailExists,
+    submitArticle,
 };
