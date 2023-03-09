@@ -95,14 +95,20 @@ The numerous endpoints are listed here:
     https://nc-news-acw.onrender.com/api/users/login
     ```
 
-13. PATCH /api/articles/:article_id
+13. POST /api/articles
+    (allows the user to add articles to the site)
+    ```bash
+    https://nc-news-acw.onrender.com/api/articles
+    ```
+
+14. PATCH /api/articles/:article_id
 (updates the given article & returns it)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-14. DELETE /api/comments/:comment_id
+15. DELETE /api/comments/:comment_id
 (deletes the associated comment)
 
     ```bash

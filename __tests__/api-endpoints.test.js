@@ -1001,7 +1001,3 @@ describe("POST - /api/articles - adds a new article to the database - happy path
     })
   })
 })
-
-
-
-
