@@ -170,6 +170,7 @@ const postArticle = (request, response, next) => {
     submitArticle(title, topic, username, body, created_at, votes).then((result) => {
       response.status(201).send({article: result});
     })
+    .catch(next)
 }
 
 const listEndpoints = (request, response, next) => {

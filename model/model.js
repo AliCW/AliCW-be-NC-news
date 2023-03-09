@@ -303,8 +303,8 @@ const checkEmailExists = (email) => {
       FROM users
       WHERE email = $1
       `, [email])
-      .then(({ rows: user }) => {
-        if (user.length === 0) {
+      .then(({ rows: email }) => {
+        if (email.length === 0) {
           return false;
         }
         return true;
@@ -326,7 +326,7 @@ const submitArticle = (title, topic, author, body, votes = 0) => {
           msg: "404 - Not found"
         })
       }
-      return article
+      return findArticleById(article[0].article_id)
     })
 }
 
