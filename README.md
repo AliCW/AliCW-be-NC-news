@@ -108,7 +108,14 @@ The numerous endpoints are listed here:
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-15. DELETE /api/comments/:comment_id
+15. DELETE /api/articles/:article_id
+(delete the associated article)
+
+    ```bash
+    https://nc-news-acw.onrender.com/api/articles/3
+    ```
+
+16. DELETE /api/comments/:comment_id
 (deletes the associated comment)
 
     ```bash
