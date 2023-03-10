@@ -330,6 +330,38 @@ const submitArticle = (title, topic, author, body, votes = 0) => {
     })
 }
 
+const deleteArticle = (article_id) => {
+  return db.query(
+    `DELETE FROM articles
+    WHERE article_id = $1;
+    `, [article_id]
+  ).then((status) => {
+    if (status.rowCount === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return status
+  })
+}
+
+
+// const deleteComment = (params) => {
+//   return db.query(`
+//   DELETE FROM comments
+//  WHERE comment_id = $1;    
+//   `, [params])
+//   .then((status) => {
+//     if (status.rowCount === 0) {
+//       return Promise.reject({
+//         msg: "404 - Not found"
+//       })
+//     }
+//     return status
+//   })
+// }
+
+
 module.exports = { 
     findAllTopics, 
     findArticles,
@@ -348,4 +380,5 @@ module.exports = {
     checkUsernameExists,
     checkEmailExists,
     submitArticle,
+    deleteArticle,
 };

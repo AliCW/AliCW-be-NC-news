@@ -253,6 +253,15 @@ const apiEndpoints = () => {
           example: "204 - No Content",
         },
       },
+      {
+        "/api/articles/:article_id": {
+          path: "DELETE /api/articles/:article_id",
+          description: "Deletes articles by article_id",
+          queries: [2, 4],
+          exampleQuery: "/api/articles/4",
+          example: "204 - No Content",
+        },
+      },
     ],
   };
   return endpoints;
