@@ -16,6 +16,7 @@ const {
   checkUsernameExists,
   checkEmailExists,
   submitArticle,
+  deleteArticle,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -173,10 +174,17 @@ const postArticle = (request, response, next) => {
     .catch(next)
 }
 
+
+  const deleteArticleById = (request, response, next) => {
+    deleteArticle(request.params.article_id).then((status) => {
+      response.status(204).send({comment: status})
+    })
+    .catch(next)
+}
+
 const listEndpoints = (request, response, next) => {
   response.status(200).send({endpoints: apiEndpoints()})
 }
-
 
 module.exports = { 
     listTopics, 
@@ -193,6 +201,7 @@ module.exports = {
     userSignup,
     userLogin,
     postArticle,
+    deleteArticleById,
     }
 
 

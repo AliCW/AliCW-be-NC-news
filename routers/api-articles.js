@@ -8,6 +8,7 @@ const {
     postArticleComment,
     addVotesToArticle,
     postArticle,
+    deleteArticleById,
  } = require("../controllers/controller")
 
  articlesRouter.get("/", listArticles)
@@ -21,5 +22,7 @@ const {
  articlesRouter.post("/", postArticle)
 
  articlesRouter.patch("/:article_id", addVotesToArticle)
+
+ articlesRouter.delete("/:article_id", deleteArticleById)
 
 module.exports = { articlesRouter }

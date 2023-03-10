@@ -1001,3 +1001,33 @@ describe("POST - /api/articles - adds a new article to the database - happy path
     })
   })
 })
+
+describe("DELETE /api/articles/:article_id - happy path", () => { 
+  test("returns a 204 - No Content response upon article deletion", () => {
+    return request(app)
+      .delete("/api/articles/4")
+      .expect(204)
+      .then((status) => {
+        expect(status.noContent).toBe(true);
+      })
+  })
+})
+
+describe("DELETE /api/articles/:article_id - sad path", () => {
+  test("returns a 404 error response when article_id does not exist", () => {
+    return request(app)
+      .delete("/api/articles/96521")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("404 - Not found")
+      })
+  })
+  test("returns a 400 error response", () => {
+    return request(app)
+      .delete("/api/articles/lx45by6")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("400 - Bad request")
+      })
+  })
+})
