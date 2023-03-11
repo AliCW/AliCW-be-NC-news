@@ -345,22 +345,23 @@ const deleteArticle = (article_id) => {
   })
 }
 
-
-// const deleteComment = (params) => {
-//   return db.query(`
-//   DELETE FROM comments
-//  WHERE comment_id = $1;    
-//   `, [params])
-//   .then((status) => {
-//     if (status.rowCount === 0) {
-//       return Promise.reject({
-//         msg: "404 - Not found"
-//       })
-//     }
-//     return status
-//   })
-// }
-
+const postTopicBySlug = (description, slug) => {
+  return db.query(`
+  INSERT INTO topics
+  (description, slug)
+  VALUES 
+  ($1, $2)
+  RETURNING *
+  `, [description, slug])
+  .then(({rows: article}) => {
+    if(article.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found"
+      })
+    }
+    return article
+  })
+}
 
 module.exports = { 
     findAllTopics, 
@@ -381,4 +382,5 @@ module.exports = {
     checkEmailExists,
     submitArticle,
     deleteArticle,
+    postTopicBySlug,
 };

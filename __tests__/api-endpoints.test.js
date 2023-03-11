@@ -1031,3 +1031,19 @@ describe("DELETE /api/articles/:article_id - sad path", () => {
       })
   })
 })
+
+describe("POST - /api/topics - Happy path", () => {
+  test("returns a 201 status & the inputted topic", () => {
+    const topicObj = {
+      description: "chris hansen doing something",
+      slug: "tcap"
+    }
+    return request(app)
+    .post("/api/topics")
+    .send(topicObj)
+    .expect(201)
+    .then(({ body: msg }) => {
+      expect(msg.body[0]).toEqual(topicObj)
+    })
+  })
+})
