@@ -969,7 +969,7 @@ describe("POST - /api/articles - adds a new article to the database - happy path
   })
 })
 
-describe("POST - /api/articles - adds a new article to the database - happy path", () => {
+describe("POST - /api/articles - adds a new article to the database - sad path", () => {
   test("tests the topic body exists within the database", () => {
     const article = {
       username: "cbeachdude",
@@ -1047,3 +1047,43 @@ describe("POST - /api/topics - Happy path", () => {
     })
   })
 })
+
+describe("POST - /api/topics - sad path", () => {
+  test("returns a 400 response when no data is provided", () => {
+    const topicObj = {}
+    return request(app)
+    .post("/api/topics")
+    .send(topicObj)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+  test("returns a 400 response when not enough data is provided", () => {
+    const topicObj ={
+      description: "chris hansen doing something",
+    }
+    return request(app)
+    .post("/api/topics")
+    .send(topicObj)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+  test("returns a 409 response when a duplicate topic is posted", () => {
+    const topicObj ={
+      description: "chris hansen doing something",
+      slug: "mitch"
+    }
+    return request(app)
+    .post("/api/topics")
+    .send(topicObj)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+})
+
+//conflict in topic name - 409

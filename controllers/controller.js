@@ -190,6 +190,7 @@ const postTopic = (request, response, next) => {
   postTopicBySlug(description, slug).then((topic) => {
     response.status(201).send({body: topic})
   })
+  .catch(next)
 }
 
 const listEndpoints = (request, response, next) => {
