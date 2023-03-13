@@ -100,23 +100,29 @@ The numerous endpoints are listed here:
     ```bash
     https://nc-news-acw.onrender.com/api/articles
     ```
+    
+14. POST /api/topics
+    (allows the user to add topics to the site)
+    ```bash
+    https://nc-news-acw.onrender.com/api/topics
+    ```
 
-14. PATCH /api/articles/:article_id
-(updates the given article & returns it)
+15. PATCH /api/articles/:article_id
+    (updates the given article & returns it)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-15. DELETE /api/articles/:article_id
-(delete the associated article)
+16. DELETE /api/articles/:article_id
+    (delete the associated article)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-16. DELETE /api/comments/:comment_id
-(deletes the associated comment)
+17. DELETE /api/comments/:comment_id
+    (deletes the associated comment)
 
     ```bash
     https://nc-news-acw.onrender.com/api/comments/3
