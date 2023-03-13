@@ -30,7 +30,10 @@ app.use((error, request, response, next) => {
     response.status(400).send({ msg: "400 - Bad request" });
   } else if (error.code === "42703" || error.msg) {
     response.status(404).send({ msg: error.msg || "404 - Not found" });
-  } else {
+  } else if (error.code === "23505" || error.msg) {
+    response.status(409).send({ body: "409 - Conflict"})
+  }
+  else {
     console.log(error);
     response.status(500).send({ msg: "500 - Internal server error" });
   }

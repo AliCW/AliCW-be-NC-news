@@ -201,6 +201,21 @@ const apiEndpoints = () => {
             },
           },
         },
+        {
+          "/api/topics": {
+            path: "POST /api/topics",
+            description: "allows users to add new topics, slug name is checked on the backend for conflicts",
+            queries: [],
+            examplePost: {
+              description: "Chris Hansen with Dateline NBC",
+              slug: "TCAP",
+            },
+            example: {
+              description: "Chris Hansen with Dateline NBC",
+              slug: "TCAP",
+            },
+          },
+        },
     ],
     PATCH: [
       {

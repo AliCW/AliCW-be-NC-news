@@ -183,9 +183,7 @@ const deleteArticleById = (request, response, next) => {
    .catch(next)
 }
 
-
 const postTopic = (request, response, next) => {
-  console.log(request.body)
   const { description, slug } = request.body
   postTopicBySlug(description, slug).then((topic) => {
     response.status(201).send({body: topic})

@@ -1071,6 +1071,7 @@ describe("POST - /api/topics - sad path", () => {
       expect(msg).toBe("400 - Bad request")
     })
   })
+
   test("returns a 409 response when a duplicate topic is posted", () => {
     const topicObj ={
       description: "chris hansen doing something",
@@ -1079,11 +1080,9 @@ describe("POST - /api/topics - sad path", () => {
     return request(app)
     .post("/api/topics")
     .send(topicObj)
-    .expect(400)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("400 - Bad request")
+    .expect(409)
+    .then(({ body: msg }) => {
+      expect(msg.body).toBe("409 - Conflict")
     })
   })
 })
-
-//conflict in topic name - 409
