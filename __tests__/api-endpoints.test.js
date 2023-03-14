@@ -1036,7 +1036,8 @@ describe("POST - /api/topics - Happy path", () => {
   test("returns a 201 status & the inputted topic", () => {
     const topicObj = {
       description: "chris hansen doing something",
-      slug: "tcap"
+      slug: "tcap",
+      author: "Chris Hansen"
     }
     return request(app)
     .post("/api/topics")
