@@ -345,14 +345,14 @@ const deleteArticle = (article_id) => {
   })
 }
 
-const postTopicBySlug = (description, slug) => {
+const postTopicBySlug = (description, slug, author) => {
   return db.query(`
   INSERT INTO topics
-  (description, slug)
+  (description, slug, author)
   VALUES 
-  ($1, $2)
+  ($1, $2, $3)
   RETURNING *
-  `, [description, slug])
+  `, [description, slug, author])
   .then(({rows: article}) => {
     if(article.length === 0) {
       return Promise.reject({

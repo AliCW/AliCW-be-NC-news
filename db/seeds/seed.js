@@ -15,7 +15,8 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   const topicsTablePromise = db.query(`
   CREATE TABLE topics (
     slug VARCHAR PRIMARY KEY,
-    description VARCHAR
+    description VARCHAR,
+    author VARCHAR
   );`);
 
   const usersTablePromise = db.query(`
@@ -51,8 +52,8 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   );`);
 
   const insertTopicsQueryStr = format(
-    'INSERT INTO topics (slug, description) VALUES %L RETURNING *;',
-    topicData.map(({ slug, description }) => [slug, description])
+    'INSERT INTO topics (slug, description, author) VALUES %L RETURNING *;',
+    topicData.map(({ slug, description, author }) => [slug, description, author])
   );
   const topicsPromise = db
     .query(insertTopicsQueryStr)

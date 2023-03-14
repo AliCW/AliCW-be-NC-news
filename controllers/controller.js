@@ -184,8 +184,8 @@ const deleteArticleById = (request, response, next) => {
 }
 
 const postTopic = (request, response, next) => {
-  const { description, slug } = request.body
-  postTopicBySlug(description, slug).then((topic) => {
+  const { description, slug, author } = request.body
+  postTopicBySlug(description, slug, author).then((topic) => {
     response.status(201).send({body: topic})
   })
   .catch(next)
