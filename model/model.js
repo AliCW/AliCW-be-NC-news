@@ -11,6 +11,12 @@ const findAllTopics = () => {
     });
 };
 
+// app.get('/api/tasks', (req, res) => {
+//     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 0;
+//     const page = req.query.page ? parseInt(req.query.page) : 0;
+//     taskController.getTasks(pageSize, page).then(data => res.json(data));
+// });
+
 const findArticles = () => {
   return db
     .query(
@@ -29,6 +35,26 @@ const findArticles = () => {
       return rows;
     });
 };
+
+const findArticlesByPage = (query) => {
+  return db
+  .query(
+    `
+    SELECT 
+    articles.author, articles.title, articles.article_id, 
+    articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+    FROM articles
+    FULL OUTER JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.title, articles.article_id, 
+    articles.topic, articles.created_at, articles.votes
+    ORDER BY articles.created_at DESC
+    LIMIT $1
+    `, [query]
+  )
+  .then(({ rows}) => {
+    return rows;
+  })
+}
 
 const findArticlesByWhereQuery = (query) => { 
 
@@ -66,6 +92,7 @@ const findArticlesByWhereQuery = (query) => {
 }
 
 const findArticlesByOrderBy = (query) => {
+  
   const queryStringStart = `
   SELECT 
   articles.author, articles.title, articles.article_id, 
@@ -105,6 +132,7 @@ const findArticlesByOrderBy = (query) => {
 }
 
 const findArticleById = (params) => {
+
   return db
     .query(
       `
@@ -383,4 +411,5 @@ module.exports = {
     submitArticle,
     deleteArticle,
     postTopicBySlug,
+    findArticlesByPage,
 };
