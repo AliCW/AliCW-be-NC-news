@@ -1087,3 +1087,59 @@ describe("POST - /api/topics - sad path", () => {
     })
   })
 })
+
+describe("GET  /api/articles?p=<number> - Happy path", () => {
+  test("should return a 200 response to account for pagination and 10 articles are per query", () => {
+    return request(app)
+    .get("/api/articles?p=1")
+    .expect(200)
+    .then(({ body: {articles} }) => {
+      expect(articles).toHaveLength(10)
+    })
+  })
+  test("should return a 200 response to account for pagination and 20 articles are per query", () => {
+    return request(app)
+    .get("/api/articles?p=2")
+    .expect(200)
+    .then(({ body: {articles} }) => {
+      expect(articles.length).toBeGreaterThan(10) //only 12 articles in the test database
+    })
+  })
+  test("checks all values are returned from search query", () => {
+    return request(app)
+    .get("/api/articles?p=1")
+    .expect(200)
+    .then(({body: {articles} }) => {
+      articles.forEach((article) => {
+        expect(article).toEqual({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comments_count: expect.any(String),
+        })
+      })
+    })
+  })
+})
+
+describe("GET  /api/articles?p=<number> - Sad path", () => {
+  test("should return a 400 response when an incompaitble request is given - I.E. just numbers", () => {
+    return request(app)
+    .get("/api/articles?p=x1alpha")
+    .expect(400)
+    .then(({body: { msg }}) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+  test("should return a 404 response when an 0 request is given", () => {
+    return request(app)
+    .get("/api/articles?p=0")
+    .expect(404)
+    .then(({ body: { msg }}) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+})

@@ -18,6 +18,7 @@ const {
   submitArticle,
   deleteArticle,
   postTopicBySlug,
+  findArticlesByPage,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -42,6 +43,15 @@ const listArticles = (request, response, next) => {
         response.status(200).send({ articles: articles });
       })
       .catch(next);
+  } else if (
+    Object.keys(request.query)[0] === "p"
+    ) {
+      const {p} = request.query
+    findArticlesByPage(p * 10)
+      .then((articles) => {
+        response.status(200).send({ articles: articles });
+      })
+      .catch(next)
   } else if (Object.keys(request.query)[0] === "sort_by") {
     findArticlesByOrderBy(request.query)
       .then((articles) => {

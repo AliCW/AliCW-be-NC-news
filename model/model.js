@@ -30,6 +30,31 @@ const findArticles = () => {
     });
 };
 
+const findArticlesByPage = (query) => {
+  return db
+  .query(
+    `
+    SELECT 
+    articles.author, articles.title, articles.article_id, 
+    articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+    FROM articles
+    FULL OUTER JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.title, articles.article_id, 
+    articles.topic, articles.created_at, articles.votes
+    ORDER BY articles.created_at DESC
+    LIMIT $1
+    `, [query]
+  )
+  .then(({ rows}) => {
+    if(rows.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found",
+      })
+    }
+    return rows;
+  })
+}
+
 const findArticlesByWhereQuery = (query) => { 
 
   const queryStringStart = `
@@ -66,6 +91,7 @@ const findArticlesByWhereQuery = (query) => {
 }
 
 const findArticlesByOrderBy = (query) => {
+  
   const queryStringStart = `
   SELECT 
   articles.author, articles.title, articles.article_id, 
@@ -105,6 +131,7 @@ const findArticlesByOrderBy = (query) => {
 }
 
 const findArticleById = (params) => {
+
   return db
     .query(
       `
@@ -383,4 +410,5 @@ module.exports = {
     submitArticle,
     deleteArticle,
     postTopicBySlug,
+    findArticlesByPage,
 };
