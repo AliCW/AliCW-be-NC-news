@@ -43,7 +43,7 @@ const listArticles = (request, response, next) => {
         response.status(200).send({ articles: articles });
       })
       .catch(next);
-  } if (
+  } else if (
     Object.keys(request.query)[0] === "p"
     ) {
       const {p} = request.query

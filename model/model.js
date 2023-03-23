@@ -11,12 +11,6 @@ const findAllTopics = () => {
     });
 };
 
-// app.get('/api/tasks', (req, res) => {
-//     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 0;
-//     const page = req.query.page ? parseInt(req.query.page) : 0;
-//     taskController.getTasks(pageSize, page).then(data => res.json(data));
-// });
-
 const findArticles = () => {
   return db
     .query(
@@ -52,6 +46,11 @@ const findArticlesByPage = (query) => {
     `, [query]
   )
   .then(({ rows}) => {
+    if(rows.length === 0) {
+      return Promise.reject({
+        msg: "404 - Not found",
+      })
+    }
     return rows;
   })
 }
