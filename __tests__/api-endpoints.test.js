@@ -1162,4 +1162,21 @@ describe("GET /api/articles/:article_id/comments?=p<number> - Happy path", () =>
       expect(comments.body.length).toBeLessThan(21)
     })
   })
+  test("should return a 200 response & return correct values from the comment query", () => {
+    return request(app)
+    .get("/api/articles/9/comments?p=1")
+    .expect(200)
+    .then(({ body: comments }) => {
+        comments.body.forEach((item) => {
+          expect(item).toEqual({
+            comment_id: expect.any(Number),
+            body: expect.any(String),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            created_at: expect.any(String),
+          })
+        })
+    })
+  })
 })
+
