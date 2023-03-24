@@ -1143,3 +1143,23 @@ describe("GET  /api/articles?p=<number> - Sad path", () => {
     })
   })
 })
+
+describe("GET /api/articles/:article_id/comments?=p<number> - Happy path", () => {
+  test("should return a 200 response with an array comment length of 10 using p=1 query", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=1")
+    .expect(200)
+    .then(({ body:  comments  }) => {
+      expect(comments.body).toHaveLength(10)
+    })
+  })
+  test("should return a 200 response with array comment length of over 10using p=2 query", () =>  {
+    return request(app)
+    .get("/api/articles/1/comments?p=2")
+    .expect(200)
+    .then(({ body: comments }) => {
+      expect(comments.body.length).toBeGreaterThan(10)
+      expect(comments.body.length).toBeLessThan(21)
+    })
+  })
+})
