@@ -126,7 +126,7 @@ const apiEndpoints = () => {
         },
       },
       {
-        "/api/articles?": {
+        "/api/articles?p=": {
           path: "GET /api/articles?p=<number>",
           description: "allows for pagination when viewing article lists",
           queries: [1, 4],
@@ -146,7 +146,7 @@ const apiEndpoints = () => {
         },
       },
       {
-      "/api/articles/:article_id/comments?": {
+      "/api/articles/:article_id/comments?p=": {
         path: "GET /api/articles/:article_id/comments?p=<number>",
         description: "allows for pagination when viewing comment lists on single article pages",
         queries: [1, 3],
