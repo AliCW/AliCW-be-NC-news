@@ -1126,7 +1126,7 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
 })
 
 describe("GET  /api/articles?p=<number> - Sad path", () => {
-  test("should return a 400 response when an incompaitble request is given - I.E. just numbers", () => {
+  test("should return a 400 response when an incompaitble request is given", () => {
     return request(app)
     .get("/api/articles?p=x1alpha")
     .expect(400)
@@ -1180,3 +1180,42 @@ describe("GET /api/articles/:article_id/comments?=p<number> - Happy path", () =>
   })
 })
 
+describe.only("GET /api/articles/:article_id/comments?=p<number> - Sad path", () => {
+  test("should return a 404 error when no comments are found for the associated article", () => {
+    return request(app)
+    .get("/api/articles/2/comments?p=1")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+  test("should return a 400 error when an incompaitble request is given", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=jimmies")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+  test("should return a 404 error when a 0 request is given", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=0")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+})
+
+
+
+
+//   test("should return a 404 response when an 0 request is given", () => {
+//     return request(app)
+//     .get("/api/articles?p=0")
+//     .expect(404)
+//     .then(({ body: { msg }}) => {
+//       expect(msg).toBe("404 - Not found")
+//     })
+//   })
+// })
