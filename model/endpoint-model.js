@@ -19,7 +19,7 @@ const apiEndpoints = () => {
         },
       },
       {
-        "/api/articles": {
+        "/api/articles?": {
           path: "GET /api/articles",
           description: `lists the articles available in the api, will list all vby default.
             accepts queries to refine searching`,
@@ -123,6 +123,44 @@ const apiEndpoints = () => {
             name: "Mr Comment",
             avatar_url: "https://exampleurl.net/img/12515474515148485415212",
           },
+        },
+      },
+      {
+        "/api/articles?": {
+          path: "GET /api/articles?p=<number>",
+          description: "allows for pagination when viewing article lists",
+          queries: [1, 4],
+          exampleQuery: [
+            "/api/articles?p=1",
+            "/api/articles?p=4"
+          ],
+          example: {
+            author: 'icellusedkars',
+            title: 'Does Mitch predate civilisation?',
+            article_id: 8,
+            topic: 'mitch',
+            created_at: '2020-04-17T01:08:00.000Z',
+            votes: 0,
+            comments_count: '0'
+          }
+        },
+      },
+      {
+      "/api/articles/:article_id/comments?": {
+        path: "GET /api/articles/:article_id/comments?p=<number>",
+        description: "allows for pagination when viewing comment lists on single article pages",
+        queries: [1, 3],
+        exampleQuery: [
+          "/api/articles/:article_id/comments?p=1",
+          "/api/articles/:article_id/comments?p=3",
+        ],
+        example: {
+          comment_id: 9,
+          votes: 0,
+          created_at: '2020-01-01T03:08:00.000Z',
+          author: 'icellusedkars',
+          body: 'Superficially charming'
+        },
         },
       },
     ],

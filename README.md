@@ -14,114 +14,128 @@ The numerous endpoints are listed here:
 
    
 1. GET /api 
-(provides an in depth list of endpoint information)
+    (provides an in depth list of endpoint information)
     
     ```bash
     https://nc-news-acw.onrender.com/api/
     ```
 
 2. GET /api/topics
-(provides a list of article topics with a description & slug tag)
+    (provides a list of article topics with a description & slug tag)
 
     ```bash
     https://nc-news-acw.onrender.com/api/topics
     ```
 
 3. GET /api/articles
-(provides all articles associated with the api)
+    (provides all articles associated with the api)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles
     ```
 
 4. GET /api/articles?topic=<query-here>
-(provides all articles associated with the given topic)
+    (provides all articles associated with the given topic)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles?topic=coding
     ```
 
 5. GET /api/articles?sort_by=<query-here>
-(provides all articles associated with the apo sorted by the given query)
+    (provides all articles associated with the apo sorted by the given query)
     
     ```bash
     https://nc-news-acw.onrender.com/api/articles?sort_by=author
     ```
 
 6. GET /api/articles?sort_by=<query-here>&order_by=<query-here>
-(provides all articles associated with the apo sorted by the given query & ordered by another query)
+    (provides all articles associated with the apo sorted by the given query & ordered by another query)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles?sort_by=author&order_by=asc
     ```
 
 7. GET /api/articles/:article_id
-(provides a specific article by article_id)
+    (provides a specific article by article_id)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
 8. GET /api/articles/:article_id/comments
-(provides comments for the article_id provided)
+    (provides comments for the article_id provided)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3/comments
     ```
 
 9. GET /api/users
-(provides the username, name & avatar url for all users)
+    (provides the username, name & avatar url for all users)
 
     ```bash
     https://nc-news-acw.onrender.com/api/users
     ```
 
-10. POST /api/articles/:article_id/comments
-(posts a comment on the associated article)
+10. GET /api/articles?p=<number>
+    (provides the pagination for article listings)
+
+    ```bash
+    https://nc-news-acw.onrender.com/api/articles?p=1
+    ```
+
+11. GET /api/articles/:article_id/comments?p=<number>
+    (provides the pagination for comments listings on single article pages)
+
+    ```bash
+    https://nc-news-acw.onrender.com/api/articles/:article_id/comments?p=1
+    ```
+
+12. POST /api/articles/:article_id/comments
+    (posts a comment on the associated article)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3/comments
     ```
 
-11. POST /api/users/signup
+13. POST /api/users/signup
     (allows the user to sign up to the site - sign up is required to vote & comment)
     ```bash
     https://nc-news-acw.onrender.com/api/users/signup
     ```
 
-12. POST /api/users/login
+13. POST /api/users/login
     (allows the user to login to the site)
     ```bash
     https://nc-news-acw.onrender.com/api/users/login
     ```
 
-13. POST /api/articles
+14. POST /api/articles
     (allows the user to add articles to the site)
     ```bash
     https://nc-news-acw.onrender.com/api/articles
     ```
     
-14. POST /api/topics
+15. POST /api/topics
     (allows the user to add topics to the site)
     ```bash
     https://nc-news-acw.onrender.com/api/topics
     ```
 
-15. PATCH /api/articles/:article_id
+16. PATCH /api/articles/:article_id
     (updates the given article & returns it)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-16. DELETE /api/articles/:article_id
+17. DELETE /api/articles/:article_id
     (delete the associated article)
 
     ```bash
     https://nc-news-acw.onrender.com/api/articles/3
     ```
 
-17. DELETE /api/comments/:comment_id
+18. DELETE /api/comments/:comment_id
     (deletes the associated comment)
 
     ```bash

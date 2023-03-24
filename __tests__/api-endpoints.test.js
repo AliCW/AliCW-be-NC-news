@@ -1102,7 +1102,7 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
     .get("/api/articles?p=2")
     .expect(200)
     .then(({ body: {articles} }) => {
-      expect(articles.length).toBeGreaterThan(10) //only 12 articles in the test database
+      expect(articles.length).toBeGreaterThan(10)
     })
   })
   test("checks all values are returned from search query", () => {
@@ -1144,7 +1144,7 @@ describe("GET  /api/articles?p=<number> - Sad path", () => {
   })
 })
 
-describe("GET /api/articles/:article_id/comments?=p<number> - Happy path", () => {
+describe("GET /api/articles/:article_id/comments?p=<number> - Happy path", () => {
   test("should return a 200 response with an array comment length of 10 using p=1 query", () => {
     return request(app)
     .get("/api/articles/1/comments?p=1")
@@ -1180,7 +1180,7 @@ describe("GET /api/articles/:article_id/comments?=p<number> - Happy path", () =>
   })
 })
 
-describe.only("GET /api/articles/:article_id/comments?=p<number> - Sad path", () => {
+describe("GET /api/articles/:article_id/comments?p=<number> - Sad path", () => {
   test("should return a 404 error when no comments are found for the associated article", () => {
     return request(app)
     .get("/api/articles/2/comments?p=1")
@@ -1207,15 +1207,3 @@ describe.only("GET /api/articles/:article_id/comments?=p<number> - Sad path", ()
   })
 })
 
-
-
-
-//   test("should return a 404 response when an 0 request is given", () => {
-//     return request(app)
-//     .get("/api/articles?p=0")
-//     .expect(404)
-//     .then(({ body: { msg }}) => {
-//       expect(msg).toBe("404 - Not found")
-//     })
-//   })
-// })
