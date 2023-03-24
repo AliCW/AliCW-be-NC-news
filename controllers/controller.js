@@ -19,6 +19,7 @@ const {
   deleteArticle,
   postTopicBySlug,
   findArticlesByPage,
+  findCommentsByPage,
 } = require("../model/model")
 
 const bcrypt = require("bcrypt")
@@ -47,7 +48,8 @@ const listArticles = (request, response, next) => {
     Object.keys(request.query)[0] === "p"
     ) {
       const {p} = request.query
-    findArticlesByPage(p * 10)
+      const pageNumber = p * 10
+    findArticlesByPage(pageNumber)
       .then((articles) => {
         response.status(200).send({ articles: articles });
       })
@@ -79,11 +81,22 @@ const findSpecificArticle = (request, response, next) => {
 };
 
 const findArticleComments = (request, response, next) => {
+  
+  if (Object.keys(request.query)[0] === "p") {
+    const {p} = request.query;
+    const pageNumber = p * 10
+    findCommentsByPage(request.params.article_id, pageNumber)
+    .then((comments) => {
+      response.status(200).send({ body: comments })
+    })
+    .catch(next)
+  } else {
   findCommentsByArticleId(request.params.article_id)
     .then((comments) => {
       response.status(200).send({ comments });
     })
     .catch(next);
+  }
 };
 
 const postArticleComment = (request, response, next) => {

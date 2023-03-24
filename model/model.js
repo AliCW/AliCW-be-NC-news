@@ -176,6 +176,28 @@ const findCommentsByArticleId = (params) => {
     });
 };
 
+const findCommentsByPage = (params, query) => {
+  return db
+    .query(
+      `SELECT comments.comment_id, comments.votes, comments.created_at, 
+     comments.author, comments.body
+     FROM comments
+     WHERE article_id = $1
+     ORDER BY comments.created_at DESC
+     LIMIT $2;
+     `,
+      [params, query]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          msg: "404 - Not found",
+        });
+      }
+      return rows;
+    });
+};
+
 const postCommentById = (username, body, article_id) => {
   return db
     .query(
@@ -411,4 +433,5 @@ module.exports = {
     deleteArticle,
     postTopicBySlug,
     findArticlesByPage,
+    findCommentsByPage,
 };

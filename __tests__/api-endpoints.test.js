@@ -1102,7 +1102,7 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
     .get("/api/articles?p=2")
     .expect(200)
     .then(({ body: {articles} }) => {
-      expect(articles.length).toBeGreaterThan(10) //only 12 articles in the test database
+      expect(articles.length).toBeGreaterThan(10)
     })
   })
   test("checks all values are returned from search query", () => {
@@ -1126,7 +1126,7 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
 })
 
 describe("GET  /api/articles?p=<number> - Sad path", () => {
-  test("should return a 400 response when an incompaitble request is given - I.E. just numbers", () => {
+  test("should return a 400 response when an incompaitble request is given", () => {
     return request(app)
     .get("/api/articles?p=x1alpha")
     .expect(400)
@@ -1143,3 +1143,67 @@ describe("GET  /api/articles?p=<number> - Sad path", () => {
     })
   })
 })
+
+describe("GET /api/articles/:article_id/comments?p=<number> - Happy path", () => {
+  test("should return a 200 response with an array comment length of 10 using p=1 query", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=1")
+    .expect(200)
+    .then(({ body:  comments  }) => {
+      expect(comments.body).toHaveLength(10)
+    })
+  })
+  test("should return a 200 response with array comment length of over 10using p=2 query", () =>  {
+    return request(app)
+    .get("/api/articles/1/comments?p=2")
+    .expect(200)
+    .then(({ body: comments }) => {
+      expect(comments.body.length).toBeGreaterThan(10)
+      expect(comments.body.length).toBeLessThan(21)
+    })
+  })
+  test("should return a 200 response & return correct values from the comment query", () => {
+    return request(app)
+    .get("/api/articles/9/comments?p=1")
+    .expect(200)
+    .then(({ body: comments }) => {
+        comments.body.forEach((item) => {
+          expect(item).toEqual({
+            comment_id: expect.any(Number),
+            body: expect.any(String),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            created_at: expect.any(String),
+          })
+        })
+    })
+  })
+})
+
+describe("GET /api/articles/:article_id/comments?p=<number> - Sad path", () => {
+  test("should return a 404 error when no comments are found for the associated article", () => {
+    return request(app)
+    .get("/api/articles/2/comments?p=1")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+  test("should return a 400 error when an incompaitble request is given", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=jimmies")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("400 - Bad request")
+    })
+  })
+  test("should return a 404 error when a 0 request is given", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=0")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("404 - Not found")
+    })
+  })
+})
+
