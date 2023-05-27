@@ -31,23 +31,27 @@ const findArticles = () => {
 };
 
 const findArticlesByPage = (query) => {
-  let returnLimit = query - 10;
-  if (returnLimit < 0) {
-    returnLimit = query
+  let offset = query - 10;
+  let limit = 10
+  if (offset < 0) {
+    offset = query
+  }
+  if (query === 0) {
+    limit = 0
   }
   return db
-  .query(`
-    SELECT 
-    articles.author, articles.title, articles.article_id, 
-    articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
-    FROM articles
-    FULL OUTER JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.title, articles.article_id, 
-    articles.topic, articles.created_at, articles.votes
-    ORDER BY articles.created_at DESC
-    LIMIT $1 OFFSET $2
-  `
-    , [query, returnLimit]
+    .query(`
+      SELECT 
+      articles.author, articles.title, articles.article_id, 
+      articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
+      FROM articles
+      FULL OUTER JOIN comments ON articles.article_id = comments.article_id
+      GROUP BY articles.title, articles.article_id, 
+      articles.topic, articles.created_at, articles.votes
+      ORDER BY articles.created_at DESC
+      LIMIT $1 OFFSET $2
+    `
+    , [limit, offset]
   )
   .then(({ rows }) => {
     if(rows.length === 0) {

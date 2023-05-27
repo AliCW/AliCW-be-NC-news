@@ -3,7 +3,7 @@ const index = require("../db/data/test-data/index.js");
 describe("testing functionality of index.js exportation of articleData", () => {
   test("articleData exportation lists an array of article data objects", () => {
     expect(index.articleData).toBeInstanceOf(Array);
-    expect(index.articleData).toHaveLength(12);
+    expect(index.articleData).toHaveLength(23);
   });
   test("articleData exportation responds with the all article object keys", () => {
     const randomIndex = Math.floor(Math.random() * 12);

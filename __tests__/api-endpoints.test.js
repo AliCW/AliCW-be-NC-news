@@ -45,7 +45,7 @@ describe("/api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles).toHaveLength(12);
+        expect(articles).toHaveLength(23);
         articles.forEach((article) => {
           expect(article).toEqual({
             author: expect.any(String),
@@ -72,9 +72,9 @@ describe("/api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles[0].comments_count).toBe("2");
-        expect(articles[5].comments_count).toBe("11");
-        expect(articles[2].comments_count).toBe("0");
+        expect(articles[0].comments_count).toBe("0");
+        expect(articles[1].comments_count).toBe("2");
+        expect(articles[2].comments_count).toBe("1");
       });
   });
 });
@@ -470,7 +470,7 @@ describe("GET - /api/articles(queries) - testing topic queries - Happy path", ()
       .get("/api/articles?topic")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles).toHaveLength(12);
+        expect(articles).toHaveLength(23);
         articles.forEach((article) => {
           expect(article).toEqual({
             author: expect.any(String),
@@ -500,7 +500,7 @@ describe("GET - /api/articles(queries) - testing topic queries - Happy path", ()
       .get("/api/articles?topic=cats")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles).toHaveLength(1);
+        expect(articles).toHaveLength(2);
       });
   });
 
@@ -1097,12 +1097,12 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
       expect(articles).toHaveLength(10)
     })
   })
-  test("should return a 200 response to account for pagination and return the last two 2 articles for the 2nd page query", () => {
+  test("should return a 200 response and return the next 10 articles", () => {
     return request(app)
     .get("/api/articles?p=2")
     .expect(200)
     .then(({ body: {articles} }) => {
-      expect(articles).toHaveLength(2) //test articles max length of 12
+      expect(articles).toHaveLength(10) //test articles max length of 23
     })
   })
   test("checks all values are returned from search query", () => {
