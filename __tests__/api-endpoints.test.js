@@ -1097,12 +1097,12 @@ describe("GET  /api/articles?p=<number> - Happy path", () => {
       expect(articles).toHaveLength(10)
     })
   })
-  test("should return a 200 response to account for pagination and 20 articles are per query", () => {
+  test("should return a 200 response to account for pagination and return the last two 2 articles for the 2nd page query", () => {
     return request(app)
     .get("/api/articles?p=2")
     .expect(200)
     .then(({ body: {articles} }) => {
-      expect(articles.length).toBeGreaterThan(10)
+      expect(articles).toHaveLength(2) //test articles max length of 12
     })
   })
   test("checks all values are returned from search query", () => {
@@ -1153,7 +1153,7 @@ describe("GET /api/articles/:article_id/comments?p=<number> - Happy path", () =>
       expect(comments.body).toHaveLength(10)
     })
   })
-  test("should return a 200 response with array comment length of over 10using p=2 query", () =>  {
+  test("should return a 200 response with array comment length of over 10 using p=2 query", () =>  {
     return request(app)
     .get("/api/articles/1/comments?p=2")
     .expect(200)

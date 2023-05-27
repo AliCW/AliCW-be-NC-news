@@ -31,9 +31,12 @@ const findArticles = () => {
 };
 
 const findArticlesByPage = (query) => {
+  let returnLimit = query - 10;
+  if (returnLimit < 0) {
+    returnLimit = query
+  }
   return db
-  .query(
-    `
+  .query(`
     SELECT 
     articles.author, articles.title, articles.article_id, 
     articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id) AS comments_count
@@ -42,10 +45,11 @@ const findArticlesByPage = (query) => {
     GROUP BY articles.title, articles.article_id, 
     articles.topic, articles.created_at, articles.votes
     ORDER BY articles.created_at DESC
-    LIMIT $1
-    `, [query]
+    LIMIT $1 OFFSET $2
+  `
+    , [query, returnLimit]
   )
-  .then(({ rows}) => {
+  .then(({ rows }) => {
     if(rows.length === 0) {
       return Promise.reject({
         msg: "404 - Not found",
