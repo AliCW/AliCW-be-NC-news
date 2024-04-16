@@ -147,7 +147,6 @@ The numerous endpoints are listed here:
 1. Clone the repository by copying the latest https link & typing the below command:
 
     ```bash
-    # clone the repo
     git clone https://github.com/AliCW/AliCW-be-NC-news.git
     ```
 
@@ -166,14 +165,12 @@ The numerous endpoints are listed here:
 3. Install the npm package dependencies by running the below command in the root of the repo:
 
     ```bash
-    # install npm dependencies
     npm install
     ```
 
 4. You will need to populate the psql database with information by typing the below command in the root of the repo:
 
     ```bash
-    # seeding the database
     npm run seed
     ```
 
@@ -184,14 +181,11 @@ The numerous endpoints are listed here:
 1. To run testing functionality, you can run the below command in the repo root to run all the tests in __tests__/
 
     ```bash
-    # run all tests
     npm run test
     ```
 
-2. If you want to run a specific test file, navigate into __tests__/ and specify the file in question
+2. If you want to run a specific test file, navigate into __tests__/ and specify the file in question, e.g:
 
     ```bash
-    # run all tests
-    cd __tests__/
-    npm test api-endpoints.test.js
+    cd __tests__/ && npm test api-endpoints.test.js
     ```
