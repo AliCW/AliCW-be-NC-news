@@ -205,6 +205,6 @@ The numerous endpoints are listed here:
     ```
 
 
-# ElephantSQL discontination
+# ElephantSQL discontinuation
 
 Following the shutdown of https://www.elephantsql.com/ - postgresql data will be hosted on https://supabase.com/
