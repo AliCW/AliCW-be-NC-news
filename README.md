@@ -194,11 +194,14 @@ The numerous endpoints are listed here:
 
 1. To run testing functionality, you can run the below command in the repo root to run all the tests in __tests__/
 
+#ElephantSQL discontination...
+Following the shutdown of https://www.elephantsql.com/ - postgresql data will be hosted on https://supabase.com/
+
     ```bash
     npm run test
     ```
 
-2. If you want to run a specific test file, navigate into __tests__/ and specify the file in question, e.g:
+3. If you want to run a specific test file, navigate into __tests__/ and specify the file in question, e.g:
 
     ```bash
     cd __tests__/ && npm test api-endpoints.test.js
