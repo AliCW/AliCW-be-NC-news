@@ -161,20 +161,34 @@ The numerous endpoints are listed here:
     ```bash
     PGDATABASE=nc_news_test
     ```
+    
+3. The api was written using node.js version 19.0.0 & psql version 14.5. Installing these distributions or later (if available) is advised
 
-3. Install the npm package dependencies by running the below command in the root of the repo:
+    ```bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    ```
+
+    ```bash
+    nvm install 19
+    ```
+
+    ```bash
+    apt install postgresql
+    ```
+   
+
+4. Install the npm package dependencies by running the below command in the root of the repo:
 
     ```bash
     npm install
     ```
 
-4. You will need to populate the psql database with information by typing the below command in the root of the repo:
+5. You will need to populate the psql database with information by typing the below command in the root of the repo:
 
     ```bash
     npm run seed
     ```
 
-5. The api was written using node.js version 19.0.0 & psql version 14.5. Installing these distributions or later (if available) is advised
 
 ## Testing
 
